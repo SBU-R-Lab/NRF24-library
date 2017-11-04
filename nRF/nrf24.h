@@ -2,7 +2,7 @@
  * Commands
  */
 #define R_REGISTER  0x00
-#define W_REGISTER  0x40
+#define W_REGISTER  0x20
 #define R_RX_PAYLOAD    0x61
 #define W_RX_PAYLOAD    0xA0
 #define FLUSH_TX    0xE1
@@ -120,9 +120,9 @@
 /*
  * DYNPD
  */
-#define DPL_P3      0
-#define DPL_P3      1
-#define DPL_P3      2
+#define DPL_P0      0
+#define DPL_P1      1
+#define DPL_P2      2
 #define DPL_P3      3
 #define DPL_P4      4
 #define DPL_P5      5
@@ -133,3 +133,49 @@
 #define EN_DYN_ACK  0
 #define EN_ACK_PAY  1
 #define EN_DPL      2
+
+
+
+
+#define NRF24L01_CE_OUT		LPC_GPIO0->FIODIR |= (1<<17)
+#define NRF24L01_CE_HIGH	LPC_GPIO0->FIOSET |= (1<<17)
+#define NRF24L01_CE_LOW		LPC_GPIO0->FIOCLR |= (1<<17)
+
+#define NRF24L01_CSN_HIGH	LPC_GPIO0->FIOSET |= (1<<6)
+#define NRF24L01_CSN_LOW	LPC_GPIO0->FIOCLR |= (1<<6)
+#define NRF24L01_CSN_OUT        LPC_GPIO0->FIODIR |= (1<<6)
+
+
+
+typedef struct {
+  unsigned char CONFIG_R ;
+  unsigned char EN_AA_R ;
+  unsigned char EN_RXADDR_R ;
+  unsigned char SETUP_AW_R ;
+  unsigned char SETUP_RETR_R ;
+  unsigned char RF_CH_R ;
+  unsigned char RF_SETUP_R ;
+  unsigned char STATUS_R ;
+  unsigned char OBSERVE_TX_R ;
+  unsigned char RPD_R ;
+  unsigned char FIFO_STATUS_R ;
+  unsigned char DYNPD_R ;
+  unsigned char FEATURE_R ;
+} nRF_REGISTERS;
+
+
+typedef struct {
+  unsigned char CE_PIN;
+  unsigned char IRQ_PIN;
+} nRF_CONFIG;
+
+void nrf_power_up();
+void intrupt() ;
+void nrf_init() ;
+void init_system() ;
+void init_irq() ;
+void init_gpio() ;
+void init_ssp() ;
+void init_registers() ;
+void write_register(unsigned char command, unsigned char* data, unsigned int length) ;
+void read_register(unsigned char command, unsigned char* data, unsigned int length) ;

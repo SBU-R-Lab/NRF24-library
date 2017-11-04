@@ -1,0 +1,103 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="nrf24-arm" target="8" version="2">
+  <project Name="nrf24-arm">
+    <configuration
+      Name="Common"
+      Placement="Flash"
+      Target="LPC1768"
+      arm_architecture="v7M"
+      arm_core_type="Cortex-M3"
+      arm_endian="Little"
+      arm_fpu_type="None"
+      arm_interwork="No"
+      arm_linker_heap_size="256"
+      arm_linker_process_stack_size="0"
+      arm_linker_stack_size="256"
+      arm_simulator_memory_simulation_parameter="ROM;0x00000000;0x00080000;RAM;0x10000000;0x00008000;RAM;0x2007C000;0x00008000"
+      arm_target_debug_interface_type="ADIv5"
+      arm_target_device_name="LPC1768"
+      arm_target_interface_type="SWD"
+      c_preprocessor_definitions="LPC175x_6x;__LPC1700_FAMILY;__LPC176x_SUBFAMILY;ARM_MATH_CM3;FLASH_PLACEMENT=1"
+      c_user_include_directories="$(ProjectDir)/CMSIS_4/CMSIS/Include;$(ProjectDir)/LPC1700/CMSIS/Device/Include"
+      debug_register_definition_file="$(ProjectDir)/LPC176x5x_Registers.xml"
+      debug_target_connection="J-Link"
+      gcc_entry_point="Reset_Handler"
+      linker_memory_map_file="$(ProjectDir)/LPC1768_MemoryMap.xml"
+      linker_section_placement_file="$(ProjectDir)/flash_placement.xml"
+      macros="DeviceHeaderFile=$(PackagesDir)/LPC1700/CMSIS/Device/Include/LPC17xx.h;DeviceLibraryIdentifier=M3l;DeviceSystemFile=$(PackagesDir)/LPC1700/CMSIS/Device/Source/system_LPC17xx.c;DeviceVectorsFile=$(PackagesDir)/LPC1700/Source/LPC176x5x_Vectors.s;DeviceFamily=LPC1700;DeviceSubFamily=LPC176x;Target=LPC1768;Placement=Flash"
+      package_dependencies="LPC1700"
+      project_directory=""
+      project_type="Executable"
+      target_reset_script="Reset();"
+      target_trace_initialize_script="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
+    <folder Name="CMSIS Files">
+      <file file_name="LPC17xx.h" />
+      <file file_name="system_LPC17xx.c">
+        <configuration
+          Name="Common"
+          default_code_section=".init"
+          default_const_section=".init_rodata" />
+      </file>
+    </folder>
+    <folder Name="Script Files">
+      <file file_name="LPC1700_Target.js">
+        <configuration Name="Common" file_type="Reset Script" />
+      </file>
+    </folder>
+    <folder Name="Source Files">
+      <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
+      <file file_name="main.c" />
+    </folder>
+    <folder Name="System Files">
+      <file file_name="thumb_crt0.s" />
+      <file file_name="LPC1700_Startup.s" />
+      <file file_name="LPC176x5x_Vectors.s">
+        <configuration Name="Common" file_type="Assembly" />
+      </file>
+    </folder>
+    <folder Name="Drivers">
+      <file file_name="Drivers/source/lpc17xx_spi.c" />
+      <file file_name="Drivers/source/lpc17xx_ssp.c" />
+      <file file_name="Drivers/source/lpc17xx_clkpwr.c" />
+      <file file_name="Drivers/source/lpc17xx_gpio.c" />
+      <file file_name="Drivers/source/lpc17xx_pinsel.c" />
+      <file file_name="Drivers/source/lpc17xx_adc.c" />
+      <file file_name="Drivers/source/lpc17xx_can.c" />
+      <file file_name="Drivers/source/lpc17xx_dac.c" />
+      <file file_name="Drivers/source/lpc17xx_emac.c" />
+      <file file_name="Drivers/source/lpc17xx_i2c.c" />
+      <file file_name="Drivers/source/lpc17xx_i2s.c" />
+      <file file_name="Drivers/source/lpc17xx_libcfg_default.c" />
+      <file file_name="Drivers/source/lpc17xx_mcpwm.c" />
+      <file file_name="Drivers/source/lpc17xx_nvic.c" />
+      <file file_name="Drivers/source/lpc17xx_pwm.c" />
+      <file file_name="Drivers/source/lpc17xx_qei.c" />
+      <file file_name="Drivers/source/lpc17xx_rit.c" />
+      <file file_name="Drivers/source/lpc17xx_rtc.c" />
+      <file file_name="Drivers/source/lpc17xx_timer.c" />
+      <file file_name="Drivers/source/lpc17xx_uart.c" />
+      <file file_name="Drivers/source/lpc17xx_wdt.c" />
+    </folder>
+    <configuration
+      Name="Debug"
+      arm_target_interface_type="JTAG"
+      c_user_include_directories=".;$(SolutionDir)/Drivers/include" />
+    <configuration
+      Name="Release"
+      c_user_include_directories=".;$(SolutionDir)/Drivers/include" />
+    <folder Name="nRF">
+      <file file_name="nRF/nrf24.c" />
+    </folder>
+  </project>
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG"
+    gcc_debugging_level="Level 3"
+    gcc_optimization_level="None" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1" />
+</solution>
