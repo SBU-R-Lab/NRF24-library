@@ -61,7 +61,7 @@
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="40" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="28" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditRight" x="0" y="431" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/include/lpc17xx_ssp.h" debugPath="Drivers/include/lpc17xx_ssp.h" selected="0" top="418" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="121" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.c" debugPath="nRF/nrf24.c" selected="1" top="108" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="121" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.c" debugPath="nRF/nrf24.c" selected="1" top="108" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditRight" x="0" y="164" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.h" debugPath="nRF/nrf24.h" selected="0" top="140" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="247" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_gpio.c" debugPath="Drivers/source/lpc17xx_gpio.c" selected="0" top="236" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="230" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_spi.c" debugPath="Drivers/source/lpc17xx_spi.c" selected="0" top="228" codecName="Default"/>

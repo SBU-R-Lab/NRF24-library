@@ -161,8 +161,28 @@ typedef struct {
   unsigned char FIFO_STATUS_R ;
   unsigned char DYNPD_R ;
   unsigned char FEATURE_R ;
+  unsigned char EN_RXADDR ;
+//  unsigned char[5] RX_ADDR_P0 ;
+//  unsigned char[5] RX_ADDR_P1 ;
+//  unsigned char RX_ADDR_P2 ;
+//  unsigned char RX_ADDR_P3 ;
+//  unsigned char RX_ADDR_P4 ;
+//  unsigned char RX_ADDR_P5 ;
+//  unsigned char RX_ADDR_P6 ;
+  unsigned char* RX_ADDR[6] ;  
+  unsigned char RX_PW[6] ;
+  
 } nRF_REGISTERS;
 
+typedef  struct {
+  unsigned char pipe_number ;
+  unsigned char* addr ;
+  unsigned char en_ack ;
+  unsigned char paylaod_size ;
+  unsigned char en_dynpld ;
+  unsigned char* recieve_buffer ;
+  unsigned char* transmit_buffer ;
+} RX_PIPE_CONFIG ; 
 
 typedef struct {
   unsigned char CE_PIN;

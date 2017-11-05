@@ -1,10 +1,10 @@
 #include "nrf24.h"
-#include "lpc17xx_ssp.h"
+#include "lpc17xx_ssp.h"XX
 
 
 /**********************/
 
-
+unsigned char* BufferPointer[6][2];
 
 nRF_REGISTERS registers ;
 
@@ -93,9 +93,6 @@ void init_registers(){
 
 } 
 
-
-/**********************/
-
 void nrf_init()
 {
   //init_system();
@@ -104,7 +101,61 @@ void nrf_init()
   init_ssp();
 }
 
+/**********************/
 
+void config_rx_pipe(RX_PIPE_CONFIG* conf){
+  unsigned int n = conf -> pipe_number ;
+
+  if (conf->en_ack)
+    registers.EN_AA_R |= (1<<n) ;
+  else
+    registers.EN_AA_R &= ~(1<<n) ;
+
+  registers.RX_ADDR[n] = conf->addr ;
+  registers.RX_PW[n] = conf->paylaod_size ;
+
+  if (conf->en_dynpld)
+    registers.DYNPD_R |=  (1<<n) ;
+  else
+    registers.DYNPD_R &=  ~(1<<n) ;
+
+  BufferPointer[n][0] = conf->recieve_buffer;
+  BufferPointer[n][1] = conf->transmit_buffer;
+  
+  unsigned char command ;
+  unsigned char length = 1 ;
+}
+
+void nrf_init_RX(){
+  unsigned char command ;
+  unsigned int length = 1 ;
+  //setting pipe line 
+  
+  
+  //setting payload size
+  command = W_REGISTER | RX_PW_P0 ;
+  //setting address
+  
+
+}
+
+void nrf_RX_Mode(){
+  unsigned char command = W_REGISTER | CONFIG ;
+  unsigned int length = 1 ;
+  //registers.CONFIG_R |= (1 << PWR_UP) ;
+  registers.CONFIG_R |= (1 << PRIM_RX) ;
+  write_register(command,&registers.CONFIG_R,length) ;
+  NRF24L01_CE_HIGH ;
+}
+
+void nrf_TX_Mode(){
+  unsigned char command = W_REGISTER | CONFIG ;
+  unsigned int length = 1 ;
+  //registers.CONFIG_R |= (1 << PWR_UP) ;
+  registers.CONFIG_R &= ~(1 << PRIM_RX) ;
+  write_register(command,&registers.CONFIG_R,length) ;
+  NRF24L01_CE_HIGH ;
+}
 
 void nrf_power_up(){
   unsigned char command = W_REGISTER | CONFIG ; 
