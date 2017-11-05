@@ -8,7 +8,10 @@ unsigned char* BufferPointer[6][2];
 
 nRF_REGISTERS registers ;
 
-void init_system();
+void init_system(){
+
+}
+
 void init_irq(){
   LPC_GPIO0->FIODIR &= !(1<<5) ;
   LPC_GPIOINT->IO0IntEnF |=(1<<5) ;
@@ -44,6 +47,19 @@ void init_ssp(){
 
   
 
+}
+
+
+
+/**********************/
+
+void nrf_init()
+{
+  init_system();
+  init_irq();
+  init_gpio();
+  init_ssp();
+  init_registers();
 }
 
 
@@ -89,17 +105,8 @@ void init_registers(){
   ///////////////READ FEATURE/////////////////
   command = R_REGISTER | FEATURE ;
   read_register(command,&registers.FEATURE_R,1) ;
-
-
 } 
 
-void nrf_init()
-{
-  //init_system();
-  init_irq();
-  init_gpio();
-  init_ssp();
-}
 
 /**********************/
 
@@ -111,8 +118,8 @@ void config_rx_pipe(RX_PIPE_CONFIG* conf){
   else
     registers.EN_AA_R &= ~(1<<n) ;
 
-  registers.RX_ADDR[n] = conf->addr ;
-  registers.RX_PW[n] = conf->paylaod_size ;
+  registers.RX_ADDR_R[n] = conf->addr ;
+  registers.RX_PW_R[n] = conf->paylaod_size ;
 
   if (conf->en_dynpld)
     registers.DYNPD_R |=  (1<<n) ;
@@ -157,6 +164,7 @@ void nrf_TX_Mode(){
   NRF24L01_CE_HIGH ;
 }
 
+
 void nrf_power_up(){
   unsigned char command = W_REGISTER | CONFIG ; 
   unsigned int length = 1 ;
@@ -176,12 +184,12 @@ void nrf_payload(unsigned char* data, unsigned int length){
     
 }
 
-void intrupt(){
+void interrupt(){
   
 }
 
 void write_register(unsigned char command, unsigned char* data, unsigned int length)
-{
+{ 
   NRF24L01_CSN_LOW ;
   
   SSP_SendData(LPC_SSP1,command) ;

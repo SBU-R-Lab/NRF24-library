@@ -1563,6 +1563,16 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Output/nrf24-arm Debug/Obj/nrf24.o
  .data          0x0000000000000000        0x0 Output/nrf24-arm Debug/Obj/nrf24.o
  .bss           0x0000000000000000        0x0 Output/nrf24-arm Debug/Obj/nrf24.o
+ .bss.BufferPointer
+                0x0000000000000000       0x30 Output/nrf24-arm Debug/Obj/nrf24.o
+ .text.config_rx_pipe
+                0x0000000000000000       0xdc Output/nrf24-arm Debug/Obj/nrf24.o
+ .text.nrf_init_RX
+                0x0000000000000000       0x12 Output/nrf24-arm Debug/Obj/nrf24.o
+ .text.nrf_RX_Mode
+                0x0000000000000000       0x48 Output/nrf24-arm Debug/Obj/nrf24.o
+ .text.nrf_TX_Mode
+                0x0000000000000000       0x48 Output/nrf24-arm Debug/Obj/nrf24.o
  .text.nrf_power_down
                 0x0000000000000000       0x38 Output/nrf24-arm Debug/Obj/nrf24.o
  .text.nrf_payload
@@ -3692,53 +3702,56 @@ Linker script and memory map
                 0x0000000000000001                . = ASSERT (((__init_rodata_start__ == __init_rodata_end__) || ((__init_rodata_end__ >= __FLASH_segment_start__) && (__init_rodata_end__ <= __FLASH_segment_end__))), error: .init_rodata is too large to fit in FLASH memory segment)
                 0x00000000000003ec                __text_load_start__ = ALIGN (__init_rodata_end__, 0x4)
 
-.text           0x00000000000003ec      0x824
+.text           0x00000000000003ec      0x82c
                 0x00000000000003ec                __text_start__ = .
  *(.text .text.* .glue_7t .glue_7 .gnu.linkonce.t.* .gcc_except_table .ARM.extab* .gnu.linkonce.armextab.*)
  .glue_7        0x00000000000003ec        0x0 linker stubs
  .glue_7t       0x00000000000003ec        0x0 linker stubs
- .text.main     0x00000000000003ec       0x10 Output/nrf24-arm Debug/Obj/main.o
+ .text.main     0x00000000000003ec        0xc Output/nrf24-arm Debug/Obj/main.o
                 0x00000000000003ec                main
  .text.EINT3_IRQHandler
-                0x00000000000003fc        0xa Output/nrf24-arm Debug/Obj/main.o
-                0x00000000000003fc                EINT3_IRQHandler
- *fill*         0x0000000000000406        0x2 
+                0x00000000000003f8        0xa Output/nrf24-arm Debug/Obj/main.o
+                0x00000000000003f8                EINT3_IRQHandler
+ *fill*         0x0000000000000402        0x2 
  .text.SSP_getNum
-                0x0000000000000408       0x30 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x0000000000000404       0x30 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
  .text.SSP_SetClock
-                0x0000000000000438       0xc4 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x0000000000000438                SSP_SetClock
+                0x0000000000000434       0xc4 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x0000000000000434                SSP_SetClock
  .text.SSP_Init
-                0x00000000000004fc       0xd8 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x00000000000004fc                SSP_Init
+                0x00000000000004f8       0xd8 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x00000000000004f8                SSP_Init
  .text.SSP_ConfigStructInit
-                0x00000000000005d4       0x34 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x00000000000005d4                SSP_ConfigStructInit
- .text.SSP_Cmd  0x0000000000000608       0x78 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x0000000000000608                SSP_Cmd
+                0x00000000000005d0       0x34 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x00000000000005d0                SSP_ConfigStructInit
+ .text.SSP_Cmd  0x0000000000000604       0x78 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x0000000000000604                SSP_Cmd
  .text.SSP_SendData
-                0x0000000000000680       0x44 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x0000000000000680                SSP_SendData
+                0x000000000000067c       0x44 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x000000000000067c                SSP_SendData
  .text.SSP_ReceiveData
-                0x00000000000006c4       0x3c Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x00000000000006c4                SSP_ReceiveData
+                0x00000000000006c0       0x3c Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x00000000000006c0                SSP_ReceiveData
  .text.SSP_GetStatus
-                0x0000000000000700       0x70 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x0000000000000700                SSP_GetStatus
+                0x00000000000006fc       0x70 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x00000000000006fc                SSP_GetStatus
  .text.CLKPWR_GetPCLKSEL
-                0x0000000000000770       0x40 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
-                0x0000000000000770                CLKPWR_GetPCLKSEL
+                0x000000000000076c       0x40 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
+                0x000000000000076c                CLKPWR_GetPCLKSEL
  .text.CLKPWR_GetPCLK
-                0x00000000000007b0       0x60 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
-                0x00000000000007b0                CLKPWR_GetPCLK
+                0x00000000000007ac       0x60 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
+                0x00000000000007ac                CLKPWR_GetPCLK
  .text.CLKPWR_ConfigPPWR
-                0x0000000000000810       0x54 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
-                0x0000000000000810                CLKPWR_ConfigPPWR
+                0x000000000000080c       0x54 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
+                0x000000000000080c                CLKPWR_ConfigPPWR
  .text.check_failed
-                0x0000000000000864        0x8 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
-                0x0000000000000864                check_failed
+                0x0000000000000860        0x8 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
+                0x0000000000000860                check_failed
  .text.NVIC_EnableIRQ
-                0x000000000000086c       0x2c Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000868       0x2c Output/nrf24-arm Debug/Obj/nrf24.o
+ .text.init_system
+                0x0000000000000894        0x4 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000894                init_system
  .text.init_irq
                 0x0000000000000898       0x2c Output/nrf24-arm Debug/Obj/nrf24.o
                 0x0000000000000898                init_irq
@@ -3748,27 +3761,28 @@ Linker script and memory map
  .text.init_ssp
                 0x00000000000008fc       0x54 Output/nrf24-arm Debug/Obj/nrf24.o
                 0x00000000000008fc                init_ssp
- .text.init_registers
-                0x0000000000000950      0x150 Output/nrf24-arm Debug/Obj/nrf24.o
-                0x0000000000000950                init_registers
  .text.nrf_init
-                0x0000000000000aa0       0x12 Output/nrf24-arm Debug/Obj/nrf24.o
-                0x0000000000000aa0                nrf_init
- *fill*         0x0000000000000ab2        0x2 
+                0x0000000000000950       0x1a Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000950                nrf_init
+ *fill*         0x000000000000096a        0x2 
+ .text.init_registers
+                0x000000000000096c      0x150 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x000000000000096c                init_registers
  .text.nrf_power_up
-                0x0000000000000ab4       0x38 Output/nrf24-arm Debug/Obj/nrf24.o
-                0x0000000000000ab4                nrf_power_up
- .text.intrupt  0x0000000000000aec        0x4 Output/nrf24-arm Debug/Obj/nrf24.o
-                0x0000000000000aec                intrupt
+                0x0000000000000abc       0x38 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000abc                nrf_power_up
+ .text.interrupt
+                0x0000000000000af4        0x4 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000af4                interrupt
  .text.write_register
-                0x0000000000000af0       0x8c Output/nrf24-arm Debug/Obj/nrf24.o
-                0x0000000000000af0                write_register
+                0x0000000000000af8       0x8c Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000af8                write_register
  .text.read_register
-                0x0000000000000b7c       0x94 Output/nrf24-arm Debug/Obj/nrf24.o
-                0x0000000000000b7c                read_register
-                0x0000000000000c10                __text_end__ = (__text_start__ + SIZEOF (.text))
-                0x0000000000000824                __text_size__ = SIZEOF (.text)
-                0x0000000000000c10                __text_load_end__ = __text_end__
+                0x0000000000000b84       0x94 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x0000000000000b84                read_register
+                0x0000000000000c18                __text_end__ = (__text_start__ + SIZEOF (.text))
+                0x000000000000082c                __text_size__ = SIZEOF (.text)
+                0x0000000000000c18                __text_load_end__ = __text_end__
 
 .vfp11_veneer   0x0000000100000000        0x0
  .vfp11_veneer  0x0000000100000000        0x0 linker stubs
@@ -3779,62 +3793,62 @@ Linker script and memory map
 .iplt           0x0000000100000000        0x0
  .iplt          0x0000000100000000        0x0 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
                 0x0000000000000001                . = ASSERT (((__text_start__ == __text_end__) || ((__text_end__ >= __FLASH_segment_start__) && (__text_end__ <= __FLASH_segment_end__))), error: .text is too large to fit in FLASH memory segment)
-                0x0000000000000c10                __dtors_load_start__ = ALIGN (__text_end__, 0x4)
+                0x0000000000000c18                __dtors_load_start__ = ALIGN (__text_end__, 0x4)
 
-.dtors          0x0000000000000c10        0x0
-                0x0000000000000c10                __dtors_start__ = .
+.dtors          0x0000000000000c18        0x0
+                0x0000000000000c18                __dtors_start__ = .
  *(SORT(.dtors.*))
  *(.dtors)
  *(.fini_array)
  *(SORT(.fini_array.*))
-                0x0000000000000c10                __dtors_end__ = (__dtors_start__ + SIZEOF (.dtors))
+                0x0000000000000c18                __dtors_end__ = (__dtors_start__ + SIZEOF (.dtors))
                 0x0000000000000000                __dtors_size__ = SIZEOF (.dtors)
-                0x0000000000000c10                __dtors_load_end__ = __dtors_end__
+                0x0000000000000c18                __dtors_load_end__ = __dtors_end__
                 0x0000000000000001                . = ASSERT (((__dtors_start__ == __dtors_end__) || ((__dtors_end__ >= __FLASH_segment_start__) && (__dtors_end__ <= __FLASH_segment_end__))), error: .dtors is too large to fit in FLASH memory segment)
-                0x0000000000000c10                __ctors_load_start__ = ALIGN (__dtors_end__, 0x4)
+                0x0000000000000c18                __ctors_load_start__ = ALIGN (__dtors_end__, 0x4)
 
-.ctors          0x0000000000000c10        0x0
-                0x0000000000000c10                __ctors_start__ = .
+.ctors          0x0000000000000c18        0x0
+                0x0000000000000c18                __ctors_start__ = .
  *(SORT(.ctors.*))
  *(.ctors)
  *(.init_array)
  *(SORT(.init_array.*))
-                0x0000000000000c10                __ctors_end__ = (__ctors_start__ + SIZEOF (.ctors))
+                0x0000000000000c18                __ctors_end__ = (__ctors_start__ + SIZEOF (.ctors))
                 0x0000000000000000                __ctors_size__ = SIZEOF (.ctors)
-                0x0000000000000c10                __ctors_load_end__ = __ctors_end__
+                0x0000000000000c18                __ctors_load_end__ = __ctors_end__
                 0x0000000000000001                . = ASSERT (((__ctors_start__ == __ctors_end__) || ((__ctors_end__ >= __FLASH_segment_start__) && (__ctors_end__ <= __FLASH_segment_end__))), error: .ctors is too large to fit in FLASH memory segment)
-                0x0000000000000c10                __rodata_load_start__ = ALIGN (__ctors_end__, 0x4)
+                0x0000000000000c18                __rodata_load_start__ = ALIGN (__ctors_end__, 0x4)
 
-.rodata         0x0000000000000c10       0x4f
-                0x0000000000000c10                __rodata_start__ = .
+.rodata         0x0000000000000c18       0x4f
+                0x0000000000000c18                __rodata_start__ = .
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata        0x0000000000000c10       0x4f Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
-                0x0000000000000c5f                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
+ .rodata        0x0000000000000c18       0x4f Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+                0x0000000000000c67                __rodata_end__ = (__rodata_start__ + SIZEOF (.rodata))
                 0x000000000000004f                __rodata_size__ = SIZEOF (.rodata)
-                0x0000000000000c5f                __rodata_load_end__ = __rodata_end__
+                0x0000000000000c67                __rodata_load_end__ = __rodata_end__
 
 .rel.dyn        0x0000000000000000        0x0
  .rel.iplt      0x0000000000000000        0x0 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
                 0x0000000000000001                . = ASSERT (((__rodata_start__ == __rodata_end__) || ((__rodata_end__ >= __FLASH_segment_start__) && (__rodata_end__ <= __FLASH_segment_end__))), error: .rodata is too large to fit in FLASH memory segment)
-                0x0000000000000c60                __ARM.exidx_load_start__ = ALIGN (__rodata_end__, 0x4)
+                0x0000000000000c68                __ARM.exidx_load_start__ = ALIGN (__rodata_end__, 0x4)
 
-.ARM.exidx      0x0000000000000c60        0x0
-                0x0000000000000c60                __ARM.exidx_start__ = .
-                0x0000000000000c60                __exidx_start = __ARM.exidx_start__
+.ARM.exidx      0x0000000000000c68        0x0
+                0x0000000000000c68                __ARM.exidx_start__ = .
+                0x0000000000000c68                __exidx_start = __ARM.exidx_start__
  *(.ARM.exidx .ARM.exidx.*)
-                0x0000000000000c60                __ARM.exidx_end__ = (__ARM.exidx_start__ + SIZEOF (.ARM.exidx))
+                0x0000000000000c68                __ARM.exidx_end__ = (__ARM.exidx_start__ + SIZEOF (.ARM.exidx))
                 0x0000000000000000                __ARM.exidx_size__ = SIZEOF (.ARM.exidx)
-                0x0000000000000c60                __exidx_end = __ARM.exidx_end__
-                0x0000000000000c60                __ARM.exidx_load_end__ = __ARM.exidx_end__
+                0x0000000000000c68                __exidx_end = __ARM.exidx_end__
+                0x0000000000000c68                __ARM.exidx_load_end__ = __ARM.exidx_end__
                 0x0000000000000001                . = ASSERT (((__ARM.exidx_start__ == __ARM.exidx_end__) || ((__ARM.exidx_end__ >= __FLASH_segment_start__) && (__ARM.exidx_end__ <= __FLASH_segment_end__))), error: .ARM.exidx is too large to fit in FLASH memory segment)
-                0x0000000000000c60                __fast_load_start__ = ALIGN (__ARM.exidx_end__, 0x4)
+                0x0000000000000c68                __fast_load_start__ = ALIGN (__ARM.exidx_end__, 0x4)
 
-.fast           0x0000000010000000        0x0 load address 0x0000000000000c60
+.fast           0x0000000010000000        0x0 load address 0x0000000000000c68
                 0x0000000010000000                __fast_start__ = .
  *(.fast .fast.*)
                 0x0000000010000000                __fast_end__ = (__fast_start__ + SIZEOF (.fast))
                 0x0000000000000000                __fast_size__ = SIZEOF (.fast)
-                0x0000000000000c60                __fast_load_end__ = (__fast_load_start__ + SIZEOF (.fast))
+                0x0000000000000c68                __fast_load_end__ = (__fast_load_start__ + SIZEOF (.fast))
                 0x0000000000000001                . = ASSERT (((__fast_load_start__ == __fast_load_end__) || ((__fast_load_end__ >= __FLASH_segment_start__) && (__fast_load_end__ <= __FLASH_segment_end__))), error: .fast is too large to fit in FLASH memory segment)
 
 .fast_run       0x0000000010000000        0x0
@@ -3844,9 +3858,9 @@ Linker script and memory map
                 0x0000000000000000                __fast_run_size__ = SIZEOF (.fast_run)
                 0x0000000010000000                __fast_run_load_end__ = __fast_run_end__
                 0x0000000000000001                . = ASSERT (((__fast_run_start__ == __fast_run_end__) || ((__fast_run_end__ >= __RAM_segment_start__) && (__fast_run_end__ <= __RAM_segment_end__))), error: .fast_run is too large to fit in RAM memory segment)
-                0x0000000000000c60                __data_load_start__ = ALIGN ((__fast_load_start__ + SIZEOF (.fast)), 0x4)
+                0x0000000000000c68                __data_load_start__ = ALIGN ((__fast_load_start__ + SIZEOF (.fast)), 0x4)
 
-.data           0x0000000010000000        0x4 load address 0x0000000000000c60
+.data           0x0000000010000000        0x4 load address 0x0000000000000c68
                 0x0000000010000000                __data_start__ = .
  *(.data .data.* .gnu.linkonce.d.*)
  .data.SystemCoreClock
@@ -3854,13 +3868,13 @@ Linker script and memory map
                 0x0000000010000000                SystemCoreClock
                 0x0000000010000004                __data_end__ = (__data_start__ + SIZEOF (.data))
                 0x0000000000000004                __data_size__ = SIZEOF (.data)
-                0x0000000000000c64                __data_load_end__ = (__data_load_start__ + SIZEOF (.data))
+                0x0000000000000c6c                __data_load_end__ = (__data_load_start__ + SIZEOF (.data))
 
 .igot.plt       0x0000000100000000        0x0
  .igot.plt      0x0000000100000000        0x0 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
                 0x0000000000000001                . = ASSERT (((__data_load_start__ == __data_load_end__) || ((__data_load_end__ >= __FLASH_segment_start__) && (__data_load_end__ <= __FLASH_segment_end__))), error: .data is too large to fit in FLASH memory segment)
 
-.data_run       0x0000000010000000        0x4 load address 0x0000000000000c60
+.data_run       0x0000000010000000        0x4 load address 0x0000000000000c68
                 0x0000000010000000                __data_run_start__ = .
                 0x0000000010000004                . = MAX ((__data_run_start__ + SIZEOF (.data)), .)
  *fill*         0x0000000010000000        0x4 
@@ -3868,16 +3882,16 @@ Linker script and memory map
                 0x0000000000000004                __data_run_size__ = SIZEOF (.data_run)
                 0x0000000010000004                __data_run_load_end__ = __data_run_end__
                 0x0000000000000001                . = ASSERT (((__data_run_start__ == __data_run_end__) || ((__data_run_end__ >= __RAM_segment_start__) && (__data_run_end__ <= __RAM_segment_end__))), error: .data_run is too large to fit in RAM memory segment)
-                0x0000000000000c64                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
+                0x0000000000000c6c                __tdata_load_start__ = ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4)
 
-.tdata          0x0000000010000004        0x0 load address 0x0000000000000c64
+.tdata          0x0000000010000004        0x0 load address 0x0000000000000c6c
                 0x0000000010000004                __tdata_start__ = .
  *(.tdata .tdata.*)
                 0x0000000010000004                __tdata_end__ = (__tdata_start__ + SIZEOF (.tdata))
                 0x0000000000000000                __tdata_size__ = SIZEOF (.tdata)
-                0x0000000000000c64                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
-                0x0000000000000c64                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
-                0x0000000000000c64                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
+                0x0000000000000c6c                __tdata_load_end__ = (__tdata_load_start__ + SIZEOF (.tdata))
+                0x0000000000000c6c                __FLASH_segment_used_end__ = (ALIGN ((__data_load_start__ + SIZEOF (.data)), 0x4) + SIZEOF (.tdata))
+                0x0000000000000c6c                __FLASH_segment_used_size__ = (__FLASH_segment_used_end__ - __FLASH_segment_start__)
                 0x0000000000000001                . = ASSERT (((__tdata_load_start__ == __tdata_load_end__) || ((__tdata_load_end__ >= __FLASH_segment_start__) && (__tdata_load_end__ <= __FLASH_segment_end__))), error: .tdata is too large to fit in FLASH memory segment)
 
 .tdata_run      0x0000000010000004        0x0
@@ -3889,46 +3903,46 @@ Linker script and memory map
                 0x0000000000000001                . = ASSERT (((__tdata_run_start__ == __tdata_run_end__) || ((__tdata_run_end__ >= __RAM_segment_start__) && (__tdata_run_end__ <= __RAM_segment_end__))), error: .tdata_run is too large to fit in RAM memory segment)
                 0x0000000010000004                __bss_load_start__ = ALIGN (__tdata_run_end__, 0x4)
 
-.bss            0x0000000010000004       0x25
+.bss            0x0000000010000004       0x48
                 0x0000000010000004                __bss_start__ = .
  *(.bss .bss.* .gnu.linkonce.b.*)
  .bss.sspdat    0x0000000010000004       0x18 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
  .bss.registers
-                0x000000001000001c        0xd Output/nrf24-arm Debug/Obj/nrf24.o
+                0x000000001000001c       0x30 Output/nrf24-arm Debug/Obj/nrf24.o
                 0x000000001000001c                registers
  *(COMMON)
-                0x0000000010000029                __bss_end__ = (__bss_start__ + SIZEOF (.bss))
-                0x0000000000000025                __bss_size__ = SIZEOF (.bss)
-                0x0000000010000029                __bss_load_end__ = __bss_end__
+                0x000000001000004c                __bss_end__ = (__bss_start__ + SIZEOF (.bss))
+                0x0000000000000048                __bss_size__ = SIZEOF (.bss)
+                0x000000001000004c                __bss_load_end__ = __bss_end__
                 0x0000000000000001                . = ASSERT (((__bss_start__ == __bss_end__) || ((__bss_end__ >= __RAM_segment_start__) && (__bss_end__ <= __RAM_segment_end__))), error: .bss is too large to fit in RAM memory segment)
-                0x000000001000002c                __tbss_load_start__ = ALIGN (__bss_end__, 0x4)
+                0x000000001000004c                __tbss_load_start__ = ALIGN (__bss_end__, 0x4)
 
-.tbss           0x000000001000002c        0x0
-                0x000000001000002c                __tbss_start__ = .
+.tbss           0x000000001000004c        0x0
+                0x000000001000004c                __tbss_start__ = .
  *(.tbss .tbss.*)
-                0x000000001000002c                __tbss_end__ = (__tbss_start__ + SIZEOF (.tbss))
+                0x000000001000004c                __tbss_end__ = (__tbss_start__ + SIZEOF (.tbss))
                 0x0000000000000000                __tbss_size__ = SIZEOF (.tbss)
-                0x000000001000002c                __tbss_load_end__ = __tbss_end__
+                0x000000001000004c                __tbss_load_end__ = __tbss_end__
                 0x0000000000000001                . = ASSERT (((__tbss_start__ == __tbss_end__) || ((__tbss_end__ >= __RAM_segment_start__) && (__tbss_end__ <= __RAM_segment_end__))), error: .tbss is too large to fit in RAM memory segment)
-                0x000000001000002c                __non_init_load_start__ = ALIGN (__tbss_end__, 0x4)
+                0x000000001000004c                __non_init_load_start__ = ALIGN (__tbss_end__, 0x4)
 
-.non_init       0x000000001000002c        0x0
-                0x000000001000002c                __non_init_start__ = .
+.non_init       0x000000001000004c        0x0
+                0x000000001000004c                __non_init_start__ = .
  *(.non_init .non_init.*)
-                0x000000001000002c                __non_init_end__ = (__non_init_start__ + SIZEOF (.non_init))
+                0x000000001000004c                __non_init_end__ = (__non_init_start__ + SIZEOF (.non_init))
                 0x0000000000000000                __non_init_size__ = SIZEOF (.non_init)
-                0x000000001000002c                __non_init_load_end__ = __non_init_end__
+                0x000000001000004c                __non_init_load_end__ = __non_init_end__
                 0x0000000000000001                . = ASSERT (((__non_init_start__ == __non_init_end__) || ((__non_init_end__ >= __RAM_segment_start__) && (__non_init_end__ <= __RAM_segment_end__))), error: .non_init is too large to fit in RAM memory segment)
-                0x000000001000002c                __heap_load_start__ = ALIGN (__non_init_end__, 0x4)
+                0x000000001000004c                __heap_load_start__ = ALIGN (__non_init_end__, 0x4)
 
-.heap           0x000000001000002c      0x100
-                0x000000001000002c                __heap_start__ = .
+.heap           0x000000001000004c      0x100
+                0x000000001000004c                __heap_start__ = .
  *(.heap .heap.*)
-                0x000000001000012c                . = ALIGN (MAX ((__heap_start__ + __HEAPSIZE__), .), 0x4)
- *fill*         0x000000001000002c      0x100 
-                0x000000001000012c                __heap_end__ = (__heap_start__ + SIZEOF (.heap))
+                0x000000001000014c                . = ALIGN (MAX ((__heap_start__ + __HEAPSIZE__), .), 0x4)
+ *fill*         0x000000001000004c      0x100 
+                0x000000001000014c                __heap_end__ = (__heap_start__ + SIZEOF (.heap))
                 0x0000000000000100                __heap_size__ = SIZEOF (.heap)
-                0x000000001000012c                __heap_load_end__ = __heap_end__
+                0x000000001000014c                __heap_load_end__ = __heap_end__
                 0x0000000000000001                . = ASSERT (((__heap_start__ == __heap_end__) || ((__heap_end__ >= __RAM_segment_start__) && (__heap_end__ <= __RAM_segment_end__))), error: .heap is too large to fit in RAM memory segment)
                 0x0000000010007f00                __stack_load_start__ = (__RAM_segment_end__ - 0x100)
 
@@ -3992,15 +4006,15 @@ LOAD /usr/share/segger_embedded_studio_3.30/lib/libvfscanf_v7m_t_le_eabi.o
 END GROUP
 OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
 
-.debug_frame    0x0000000000000000      0x638
+.debug_frame    0x0000000000000000      0x6d8
  .debug_frame   0x0000000000000000       0x4c Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_frame   0x000000000000004c       0x48 Output/nrf24-arm Debug/Obj/main.o
  .debug_frame   0x0000000000000094      0x308 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
  .debug_frame   0x000000000000039c       0xd8 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
  .debug_frame   0x0000000000000474       0x28 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
- .debug_frame   0x000000000000049c      0x19c Output/nrf24-arm Debug/Obj/nrf24.o
+ .debug_frame   0x000000000000049c      0x23c Output/nrf24-arm Debug/Obj/nrf24.o
 
-.debug_info     0x0000000000000000     0x25e6
+.debug_info     0x0000000000000000     0x27a3
  .debug_info    0x0000000000000000      0x30d Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_info    0x000000000000030d      0x674 Output/nrf24-arm Debug/Obj/main.o
  .debug_info    0x0000000000000981       0x95 Output/nrf24-arm Debug/Obj/thumb_crt0.o
@@ -4009,9 +4023,9 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
  .debug_info    0x0000000000000b54      0x7d6 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
  .debug_info    0x000000000000132a      0x652 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
  .debug_info    0x000000000000197c       0xb3 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
- .debug_info    0x0000000000001a2f      0xbb7 Output/nrf24-arm Debug/Obj/nrf24.o
+ .debug_info    0x0000000000001a2f      0xd74 Output/nrf24-arm Debug/Obj/nrf24.o
 
-.debug_abbrev   0x0000000000000000      0x900
+.debug_abbrev   0x0000000000000000      0x925
  .debug_abbrev  0x0000000000000000       0xf4 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_abbrev  0x00000000000000f4      0x13d Output/nrf24-arm Debug/Obj/main.o
  .debug_abbrev  0x0000000000000231       0x12 Output/nrf24-arm Debug/Obj/thumb_crt0.o
@@ -4020,10 +4034,10 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
  .debug_abbrev  0x000000000000026b      0x20d Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
  .debug_abbrev  0x0000000000000478      0x1cd Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
  .debug_abbrev  0x0000000000000645       0x6d Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
- .debug_abbrev  0x00000000000006b2      0x24e Output/nrf24-arm Debug/Obj/nrf24.o
+ .debug_abbrev  0x00000000000006b2      0x273 Output/nrf24-arm Debug/Obj/nrf24.o
 
 .debug_pubnames
-                0x0000000000000000      0x751
+                0x0000000000000000      0x7ca
  .debug_pubnames
                 0x0000000000000000       0x4f Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_pubnames
@@ -4035,10 +4049,10 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
  .debug_pubnames
                 0x000000000000036a       0x23 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
  .debug_pubnames
-                0x000000000000038d      0x3c4 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x000000000000038d      0x43d Output/nrf24-arm Debug/Obj/nrf24.o
 
 .debug_pubtypes
-                0x0000000000000000      0x752
+                0x0000000000000000      0x765
  .debug_pubtypes
                 0x0000000000000000       0xd8 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_pubtypes
@@ -4050,9 +4064,9 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
  .debug_pubtypes
                 0x000000000000050a       0xc1 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
  .debug_pubtypes
-                0x00000000000005cb      0x187 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x00000000000005cb      0x19a Output/nrf24-arm Debug/Obj/nrf24.o
 
-.debug_aranges  0x0000000000000000      0x318
+.debug_aranges  0x0000000000000000      0x340
  .debug_aranges
                 0x0000000000000000       0x28 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_aranges
@@ -4070,16 +4084,16 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
  .debug_aranges
                 0x0000000000000280       0x20 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
  .debug_aranges
-                0x00000000000002a0       0x78 Output/nrf24-arm Debug/Obj/nrf24.o
+                0x00000000000002a0       0xa0 Output/nrf24-arm Debug/Obj/nrf24.o
 
-.debug_ranges   0x0000000000000000      0x270
+.debug_ranges   0x0000000000000000      0x298
  .debug_ranges  0x0000000000000000       0x18 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
  .debug_ranges  0x0000000000000018       0x18 Output/nrf24-arm Debug/Obj/main.o
  .debug_ranges  0x0000000000000030       0xd8 Output/nrf24-arm Debug/Obj/thumb_crt0.o
  .debug_ranges  0x0000000000000108       0xa8 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
  .debug_ranges  0x00000000000001b0       0x48 Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
  .debug_ranges  0x00000000000001f8       0x10 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
- .debug_ranges  0x0000000000000208       0x68 Output/nrf24-arm Debug/Obj/nrf24.o
+ .debug_ranges  0x0000000000000208       0x90 Output/nrf24-arm Debug/Obj/nrf24.o
 
 .debug_macro    0x0000000000000000     0x289a
  .debug_macro   0x0000000000000000      0x115 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
@@ -4106,18 +4120,18 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
  .debug_macro   0x000000000000274f       0xc5 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
  .debug_macro   0x0000000000002814       0x86 Output/nrf24-arm Debug/Obj/nrf24.o
 
-.debug_line     0x0000000000000000     0x1636
+.debug_line     0x0000000000000000     0x16ad
  .debug_line    0x0000000000000000      0x220 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
- .debug_line    0x0000000000000220      0x28f Output/nrf24-arm Debug/Obj/main.o
- .debug_line    0x00000000000004af      0x2a0 Output/nrf24-arm Debug/Obj/thumb_crt0.o
- .debug_line    0x000000000000074f       0x85 Output/nrf24-arm Debug/Obj/LPC1700_Startup.o
- .debug_line    0x00000000000007d4       0xa0 Output/nrf24-arm Debug/Obj/LPC176x5x_Vectors.o
- .debug_line    0x0000000000000874      0x640 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
- .debug_line    0x0000000000000eb4      0x2fa Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
- .debug_line    0x00000000000011ae      0x136 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
- .debug_line    0x00000000000012e4      0x352 Output/nrf24-arm Debug/Obj/nrf24.o
+ .debug_line    0x0000000000000220      0x28e Output/nrf24-arm Debug/Obj/main.o
+ .debug_line    0x00000000000004ae      0x2a0 Output/nrf24-arm Debug/Obj/thumb_crt0.o
+ .debug_line    0x000000000000074e       0x85 Output/nrf24-arm Debug/Obj/LPC1700_Startup.o
+ .debug_line    0x00000000000007d3       0xa0 Output/nrf24-arm Debug/Obj/LPC176x5x_Vectors.o
+ .debug_line    0x0000000000000873      0x640 Output/nrf24-arm Debug/Obj/lpc17xx_ssp.o
+ .debug_line    0x0000000000000eb3      0x2fa Output/nrf24-arm Debug/Obj/lpc17xx_clkpwr.o
+ .debug_line    0x00000000000011ad      0x136 Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
+ .debug_line    0x00000000000012e3      0x3ca Output/nrf24-arm Debug/Obj/nrf24.o
 
-.debug_str      0x0000000000000000     0xc749
+.debug_str      0x0000000000000000     0xc80c
  .debug_str     0x0000000000000000     0x8842 Output/nrf24-arm Debug/Obj/system_LPC17xx.o
                                        0x88b3 (size before relaxing)
  .debug_str     0x0000000000008842     0x2029 Output/nrf24-arm Debug/Obj/main.o
@@ -4128,8 +4142,8 @@ OUTPUT(Output/Debug/Exe/nrf24-arm.elf elf32-littlearm)
                                        0x9aa8 (size before relaxing)
  .debug_str     0x000000000000c081       0x6c Output/nrf24-arm Debug/Obj/lpc17xx_libcfg_default.o
                                        0x2e25 (size before relaxing)
- .debug_str     0x000000000000c0ed      0x65c Output/nrf24-arm Debug/Obj/nrf24.o
-                                       0xa235 (size before relaxing)
+ .debug_str     0x000000000000c0ed      0x71f Output/nrf24-arm Debug/Obj/nrf24.o
+                                       0xa2f8 (size before relaxing)
 
 .comment        0x0000000000000000       0x4c
  .comment       0x0000000000000000       0x4c Output/nrf24-arm Debug/Obj/system_LPC17xx.o

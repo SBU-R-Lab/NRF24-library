@@ -39,13 +39,11 @@ SSP_FRAME_SPI,
 void main(void) {
   nrf_init() ;
   nrf_power_up() ;
-  
-  init_registers() ;
 
   while(1);
 }
 void EINT3_IRQHandler(){
-  intrupt() ;
+  interrupt() ;
 }
 
 /*************************** End of file ****************************/

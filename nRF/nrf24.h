@@ -161,7 +161,6 @@ typedef struct {
   unsigned char FIFO_STATUS_R ;
   unsigned char DYNPD_R ;
   unsigned char FEATURE_R ;
-  unsigned char EN_RXADDR ;
 //  unsigned char[5] RX_ADDR_P0 ;
 //  unsigned char[5] RX_ADDR_P1 ;
 //  unsigned char RX_ADDR_P2 ;
@@ -169,8 +168,8 @@ typedef struct {
 //  unsigned char RX_ADDR_P4 ;
 //  unsigned char RX_ADDR_P5 ;
 //  unsigned char RX_ADDR_P6 ;
-  unsigned char* RX_ADDR[6] ;  
-  unsigned char RX_PW[6] ;
+  unsigned char* RX_ADDR_R[6] ;  
+  unsigned char RX_PW_R[6] ;
   
 } nRF_REGISTERS;
 
@@ -190,7 +189,7 @@ typedef struct {
 } nRF_CONFIG;
 
 void nrf_power_up();
-void intrupt() ;
+void interrupt() ;
 void nrf_init() ;
 void init_system() ;
 void init_irq() ;
