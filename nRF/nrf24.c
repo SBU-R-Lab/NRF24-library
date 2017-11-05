@@ -47,6 +47,19 @@ void init_ssp(){
 }
 
 
+
+/**********************/
+
+void nrf_init()
+{
+  //init_system();
+  init_irq();
+  init_gpio();
+  init_ssp();
+  init_registers();
+}
+
+
 void init_registers(){
   unsigned char command = R_REGISTER ;
   unsigned int length = 1 ;
@@ -89,21 +102,7 @@ void init_registers(){
   ///////////////READ FEATURE/////////////////
   command = R_REGISTER | FEATURE ;
   read_register(command,&registers.FEATURE_R,1) ;
-
-
 } 
-
-
-/**********************/
-
-void nrf_init()
-{
-  //init_system();
-  init_irq();
-  init_gpio();
-  init_ssp();
-}
-
 
 
 void nrf_power_up(){
@@ -130,7 +129,7 @@ void intrupt(){
 }
 
 void write_register(unsigned char command, unsigned char* data, unsigned int length)
-{
+{ 
   NRF24L01_CSN_LOW ;
   
   SSP_SendData(LPC_SSP1,command) ;
