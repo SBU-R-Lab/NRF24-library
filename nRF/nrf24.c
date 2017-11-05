@@ -129,8 +129,30 @@ void config_rx_pipe(RX_PIPE_CONFIG* conf){
   BufferPointer[n][0] = conf->recieve_buffer;
   BufferPointer[n][1] = conf->transmit_buffer;
   
+
   unsigned char command ;
   unsigned char length = 1 ;
+  command = W_REGISTER | EN_AA ;
+  write_register(command,&registers.EN_AA_R,length) ;
+  command = W_REGISTER | RX_ADDR_P0 + n ;
+  length = (n / 2 == 0) ? 5 : 1 ;
+  write_register(command,&registers.RX_ADDR_R[n],length) ;
+  command = W_REGISTER | RX_PW_P0 + n ;
+  length = 1 ;
+  write_register(command,&registers.RX_PW_R[n],length) ;
+  command = W_REGISTER | DYNPD ;
+  write_register(command,&registers.DYNPD_R,length) ;
+  
+}
+void set_pipe_en(unsigned char n,unsigned char en){
+  unsigned char command ;
+  unsigned char length = 1 ;
+  if (en)
+    registers.EN_RXADDR_R |= (1<<n) ;
+  else
+    registers.EN_RXADDR_R &= ~(1<<n) ;
+  command = W_REGISTER | EN_RXADDR ;
+  write_register(command,&registers.EN_RXADDR_R,length) ;
 }
 
 void nrf_init_RX(){
