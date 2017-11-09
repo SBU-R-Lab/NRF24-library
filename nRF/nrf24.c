@@ -1,5 +1,5 @@
 #include "nrf24.h"
-#include "lpc17xx_ssp.h"XX
+#include "lpc17xx_ssp.h"
 
 
 /**********************/
@@ -7,6 +7,8 @@
 unsigned char* BufferPointer[6][2];
 
 nRF_REGISTERS registers ;
+
+unsigned char TX_ADDR_GLOBAL[5] ;
 
 void init_system(){
 
@@ -55,11 +57,14 @@ void init_ssp(){
 
 void nrf_init()
 {
+  registers.TX_ADDR_R = TX_ADDR_GLOBAL ;
   init_system();
   init_irq();
   init_gpio();
   init_ssp();
   init_registers();
+  unsigned char dat = 0xF0;
+  write_register(W_REGISTER | STATUS, &dat,1);
 }
 
 
@@ -105,10 +110,34 @@ void init_registers(){
   ///////////////READ FEATURE/////////////////
   command = R_REGISTER | FEATURE ;
   read_register(command,&registers.FEATURE_R,1) ;
+  /////////
+  command = R_REGISTER | TX_ADDR ;
+  read_register(command,registers.TX_ADDR_R,5) ;
 } 
 
 
 /**********************/
+
+void config_tx_pipe(TX_CONFIG* conf){
+  registers.SETUP_RETR_R = conf->setup_retr ;
+  registers.TX_ADDR_R = conf->tx_addr ;
+  unsigned char command ;
+  unsigned char length = 1 ;
+  command = W_REGISTER | SETUP_RETR ;
+  write_register(command,&registers.SETUP_RETR_R,length) ;
+  command = W_REGISTER | FEATURE;
+  registers.FEATURE_R = 1;
+  write_register(command, &registers.FEATURE_R,length);
+////  length = 5 ;
+////  command = W_REGISTER | TX_ADDR ;
+////  write_register(command,registers.TX_ADDR_R,length) ;
+//  registers.EN_RXADDR_R = 0x01 ;
+//  command = W_REGISTER | EN_RXADDR ;
+//  write_register(command,&registers.EN_RXADDR_R,1) ;
+//  command = W_REGISTER | RX_ADDR_P0 ;
+//  write_register(command,&registers.TX_ADDR_R,length) ;
+  
+}
 
 void config_rx_pipe(RX_PIPE_CONFIG* conf){
   unsigned int n = conf -> pipe_number ;
@@ -129,22 +158,46 @@ void config_rx_pipe(RX_PIPE_CONFIG* conf){
   BufferPointer[n][0] = conf->recieve_buffer;
   BufferPointer[n][1] = conf->transmit_buffer;
   
+
   unsigned char command ;
   unsigned char length = 1 ;
+  command = W_REGISTER | EN_AA ;
+  write_register(command,&registers.EN_AA_R,length) ;
+  command = W_REGISTER | RX_ADDR_P0 + n ;
+  length = (n / 2 == 0) ? 5 : 1 ;
+  write_register(command,registers.RX_ADDR_R[n],length) ;
+  command = W_REGISTER | RX_PW_P0 + n ;
+  length = 1 ;
+  write_register(command,&registers.RX_PW_R[n],length) ;
+  command = W_REGISTER | DYNPD ;
+  write_register(command,&registers.DYNPD_R,length) ;
+  
 }
-
-void nrf_init_RX(){
+void set_rx_pipe_en(unsigned char n,unsigned char en){
   unsigned char command ;
-  unsigned int length = 1 ;
-  //setting pipe line 
-  
-  
-  //setting payload size
-  command = W_REGISTER | RX_PW_P0 ;
-  //setting address
-  
-
+  unsigned char length = 1 ;
+  if (en)
+    registers.EN_RXADDR_R |= (1<<n) ;
+  else
+    registers.EN_RXADDR_R &= ~(1<<n) ;
+  command = W_REGISTER | EN_RXADDR ;
+  write_register(command,&registers.EN_RXADDR_R,length) ;
 }
+//void nrf_init_RX(){
+//  unsigned char command ;
+//  unsigned int length = 1 ;
+//  //setting pipe line  
+//  //setting payload size
+//  command = W_REGISTER | RX_PW_P0 ;
+//  //setting address
+//  
+//}
+void set_tx_payload(unsigned char* data,unsigned char length){
+  unsigned char command = W_TX_PAYLOAD_NOACK ;
+  write_register(command,data,length) ;
+}
+
+
 
 void nrf_RX_Mode(){
   unsigned char command = W_REGISTER | CONFIG ;
@@ -154,7 +207,6 @@ void nrf_RX_Mode(){
   write_register(command,&registers.CONFIG_R,length) ;
   NRF24L01_CE_HIGH ;
 }
-
 void nrf_TX_Mode(){
   unsigned char command = W_REGISTER | CONFIG ;
   unsigned int length = 1 ;
@@ -180,12 +232,29 @@ void nrf_power_down(){
   write_register(command, &registers.CONFIG_R,length) ;
 }
 
-void nrf_payload(unsigned char* data, unsigned int length){
-    
+void rx_payload(unsigned char* data){
+  unsigned char command = R_REGISTER | STATUS ;
+  read_register(command,&registers.STATUS_R,1) ;
+  unsigned char rx_pipe_n = (registers.STATUS_R & 0xE) >> 1 ; 
+  command = R_REGISTER | RX_PW_P0 + rx_pipe_n ;
+  unsigned char rx_payload_size = 0 ;
+  read_register(command,&rx_payload_size,1) ;
+  command = R_RX_PAYLOAD ;
+  read_register(command,data,rx_payload_size) ;
+}
+
+void flush_tx(){
+  unsigned char command = FLUSH_TX ;
+  write_register(command,NULL,0) ;
 }
 
 void interrupt(){
-  
+  read_register(NOP,&registers.STATUS_R,0);
+  read_register(R_REGISTER | OBSERVE_TX,&registers.OBSERVE_TX_R,1);
+  unsigned char dat = 0xF0;
+  write_register(W_REGISTER | STATUS, &dat,1);
+  dat = 0x02;
+  write_register(W_REGISTER | RF_CH, &dat,1);
 }
 
 void write_register(unsigned char command, unsigned char* data, unsigned int length)
@@ -210,8 +279,9 @@ void read_register(unsigned char command, unsigned char* data, unsigned int leng
   SSP_SendData(LPC_SSP1,command) ;
   registers.STATUS_R = SSP_ReceiveData(LPC_SSP1) ;
   for (int i = length -1 ;i >= 0 ;i--){
-    SSP_SendData(LPC_SSP1,0x00) ;
-    data[i] = (uint8_t)SSP_ReceiveData(LPC_SSP1) ;
+      SSP_SendData(LPC_SSP1,0x00) ;
+      while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
+        data[i] = (uint8_t)SSP_ReceiveData(LPC_SSP1) ;
   }
 
   while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );

@@ -4,7 +4,7 @@
 #define R_REGISTER  0x00
 #define W_REGISTER  0x20
 #define R_RX_PAYLOAD    0x61
-#define W_RX_PAYLOAD    0xA0
+#define W_TX_PAYLOAD    0xA0
 #define FLUSH_TX    0xE1
 #define FLUSH_RX    0xE2
 #define REUSE_TX_PL 0xE3
@@ -170,6 +170,7 @@ typedef struct {
 //  unsigned char RX_ADDR_P6 ;
   unsigned char* RX_ADDR_R[6] ;  
   unsigned char RX_PW_R[6] ;
+  unsigned char* TX_ADDR_R ;
   
 } nRF_REGISTERS;
 
@@ -182,6 +183,11 @@ typedef  struct {
   unsigned char* recieve_buffer ;
   unsigned char* transmit_buffer ;
 } RX_PIPE_CONFIG ; 
+typedef  struct {
+  unsigned char setup_retr ;
+  unsigned char* tx_addr ;
+
+} TX_CONFIG ; 
 
 typedef struct {
   unsigned char CE_PIN;
@@ -196,5 +202,16 @@ void init_irq() ;
 void init_gpio() ;
 void init_ssp() ;
 void init_registers() ;
+void config_tx_pipe(TX_CONFIG* conf);
+void config_rx_pipe(RX_PIPE_CONFIG* conf);
+void set_rx_pipe_en(unsigned char n,unsigned char en);
+void set_tx_payload(unsigned char* data,unsigned char length);
+void nrf_RX_Mode();
+void nrf_TX_Mode();
+void nrf_power_up();
+void nrf_power_down();
+void rx_payload(unsigned char* data) ;
+void flush_tx();
 void write_register(unsigned char command, unsigned char* data, unsigned int length) ;
 void read_register(unsigned char command, unsigned char* data, unsigned int length) ;
+
