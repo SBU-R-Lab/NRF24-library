@@ -4,7 +4,11 @@
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
   <BreakpointListItem trigger="" line="438" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="Drivers/include/lpc17xx_ssp.h" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="22" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="main.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="41" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="main.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="42" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="main.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="47" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="main.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="114" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="nRF/nrf24.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="196" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="nRF/nrf24.h" useHWbreakpoint="false"/>
+  <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBufferWindow>
@@ -59,15 +63,15 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="40" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="28" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="30" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditRight" x="0" y="431" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/include/lpc17xx_ssp.h" debugPath="Drivers/include/lpc17xx_ssp.h" selected="0" top="418" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="121" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.c" debugPath="nRF/nrf24.c" selected="1" top="108" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditRight" x="0" y="164" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.h" debugPath="nRF/nrf24.h" selected="0" top="140" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="34" y="279" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.c" debugPath="nRF/nrf24.c" selected="1" top="271" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditRight" x="16" y="172" useTextEdit="1" useBinaryEdit="0" left="0" path="nRF/nrf24.h" debugPath="nRF/nrf24.h" selected="0" top="15" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="247" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_gpio.c" debugPath="Drivers/source/lpc17xx_gpio.c" selected="0" top="236" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="230" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_spi.c" debugPath="Drivers/source/lpc17xx_spi.c" selected="0" top="228" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="471" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_ssp.c" debugPath="Drivers/source/lpc17xx_ssp.c" selected="0" top="450" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="242" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_spi.c" debugPath="Drivers/source/lpc17xx_spi.c" selected="0" top="228" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="23" y="458" useTextEdit="1" useBinaryEdit="0" left="0" path="Drivers/source/lpc17xx_ssp.c" debugPath="Drivers/source/lpc17xx_ssp.c" selected="0" top="446" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="112" useTextEdit="1" useBinaryEdit="0" left="0" path="LPC176x5x_Vectors.s" debugPath="LPC176x5x_Vectors.s" selected="0" top="112" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="273" useTextEdit="1" useBinaryEdit="0" left="0" path="thumb_crt0.s" debugPath="thumb_crt0.s" selected="0" top="261" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="nrf24-arm" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="/home/bardia/Documents/Quad/NRF/git/NRF24-library/nRF" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="nrf24-arm" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="/home/bardia/Documents/Quad/NRF/git/NRF24-library/nRF" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

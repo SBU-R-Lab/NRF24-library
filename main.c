@@ -29,6 +29,7 @@ SSP_FRAME_SPI,
 400000
 };
 
+
 /*********************************************************************
 *
 *       main()
@@ -39,10 +40,23 @@ SSP_FRAME_SPI,
 void main(void) {
   nrf_init() ;
   nrf_power_up() ;
-
-  while(1);
+  nrf_TX_Mode() ;
+  TX_CONFIG tcfg ;
+  tcfg.setup_retr = 0x00 ;
+  unsigned char addr[5] = {0x1,0,0,0,0} ;
+  tcfg.tx_addr = addr ;
+  config_tx_pipe(&tcfg);
+  flush_tx();
+  unsigned char payload[1] ;
+  payload[0] = 0x65   ;
+  set_tx_payload(payload,1) ;
+  
+  while(1){
+    
+  }
 }
 void EINT3_IRQHandler(){
+  LPC_GPIOINT->IO0IntClr = (1 << 5);
   interrupt() ;
 }
 
