@@ -54,3 +54,42 @@ void setCSN(unsigned char state)
   else
     LPC_GPIO0->FIOCLR |= (1<<6);
 }
+
+
+unsigned char write_register(unsigned char command, unsigned char* data, unsigned int length)
+{ 
+  unsigned char status = 0;
+  setCSN(LOW) ;
+  
+  SSP_SendData(LPC_SSP1,command) ;
+  status = SSP_ReceiveData(LPC_SSP1) ;
+  for (int i = 0 ; i < length ;i++){
+    SSP_SendData(LPC_SSP1,data[i]) ;
+  }
+  
+  while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
+
+  setCSN(HIGH) ;
+  
+  return status;
+}
+
+unsigned char read_register(unsigned char command, unsigned char* data, unsigned int length)
+{
+  unsigned char status = 0;
+  setCSN(LOW) ;
+  
+  SSP_SendData(LPC_SSP1,command) ;
+  status = SSP_ReceiveData(LPC_SSP1) ;
+  for (int i = length -1 ;i >= 0 ;i--){
+      SSP_SendData(LPC_SSP1,0xFF) ;
+      while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
+        data[i] = (uint8_t)SSP_ReceiveData(LPC_SSP1) ;
+  }
+
+  while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
+
+  setCSN(HIGH) ;
+
+  return status;
+}

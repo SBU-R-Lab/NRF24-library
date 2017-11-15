@@ -203,7 +203,7 @@ void rx_payload(unsigned char* data){
 
 void flush_tx(){
   unsigned char command = FLUSH_TX ;
-  write_register(command,NULL,0) ;
+  write_register(command,0,0) ;
 }
 
 void interrupt(){
@@ -213,36 +213,4 @@ void interrupt(){
   write_register(W_REGISTER | STATUS, &dat,1);
   dat = 0x02;
   write_register(W_REGISTER | RF_CH, &dat,1);
-}
-
-void write_register(unsigned char command, unsigned char* data, unsigned int length)
-{ 
-  setCSN(LOW) ;
-  
-  SSP_SendData(LPC_SSP1,command) ;
-  registers.STATUS_R = SSP_ReceiveData(LPC_SSP1) ;
-  for (int i = 0 ; i < length ;i++){
-    SSP_SendData(LPC_SSP1,data[i]) ;
-  }
-  
-  while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
-
-  setCSN(HIGH) ;
-}
-
-void read_register(unsigned char command, unsigned char* data, unsigned int length)
-{
-  setCSN(LOW) ;
-  
-  SSP_SendData(LPC_SSP1,command) ;
-  registers.STATUS_R = SSP_ReceiveData(LPC_SSP1) ;
-  for (int i = length -1 ;i >= 0 ;i--){
-      SSP_SendData(LPC_SSP1,0x00) ;
-      while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
-        data[i] = (uint8_t)SSP_ReceiveData(LPC_SSP1) ;
-  }
-
-  while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
-
-  setCSN(HIGH) ;
 }

@@ -1,3 +1,6 @@
+#ifndef _NRF24_H
+#define _NRF24_h
+
 /*
  * Commands
  */
@@ -186,10 +189,6 @@ typedef struct {
 void nrf_power_up();
 void interrupt() ;
 void nrf_init() ;
-void init_system() ;
-void init_irq() ;
-void init_gpio() ;
-void init_ssp() ;
 void init_registers() ;
 void config_tx_pipe(TX_CONFIG* conf);
 void config_rx_pipe(RX_PIPE_CONFIG* conf);
@@ -201,6 +200,5 @@ void nrf_power_up();
 void nrf_power_down();
 void rx_payload(unsigned char* data) ;
 void flush_tx();
-void write_register(unsigned char command, unsigned char* data, unsigned int length) ;
-void read_register(unsigned char command, unsigned char* data, unsigned int length) ;
 
+#endif
