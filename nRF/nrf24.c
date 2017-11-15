@@ -1,5 +1,5 @@
 #include "nrf24.h"
-#include "lpc17xx_ssp.h"
+#include "nrf_hal.h"
 
 
 /**********************/
@@ -9,48 +9,6 @@ unsigned char* BufferPointer[6][2];
 nRF_REGISTERS registers ;
 
 unsigned char TX_ADDR_GLOBAL[5] ;
-
-void init_system(){
-
-}
-
-void init_irq(){
-  LPC_GPIO0->FIODIR &= !(1<<5) ;
-  LPC_GPIOINT->IO0IntEnF |=(1<<5) ;
-  NVIC_EnableIRQ(EINT3_IRQn);
-}
-
-
-void init_gpio(){
-
-  NRF24L01_CE_OUT;
-  NRF24L01_CE_LOW;
- 
-  NRF24L01_CSN_OUT ;
-  NRF24L01_CSN_HIGH ;
-
-  
-
-}
-void init_ssp(){
-  
-  
-  LPC_PINCON->PINSEL0 |= 0x2<<14 ; //SCK1
-  LPC_PINCON->PINSEL0 |= 0x2<<16 ; //MISO1
-  LPC_PINCON->PINSEL0 |= 0x2<<18 ; //MOSI1
-    
-
-  SSP_CFG_Type cfg ;
- 
-  
-  SSP_ConfigStructInit(&cfg) ;
-  SSP_Init(LPC_SSP1,&cfg) ;
-  SSP_Cmd(LPC_SSP1,ENABLE) ;
-
-  
-
-}
-
 
 
 /**********************/
@@ -205,7 +163,7 @@ void nrf_RX_Mode(){
   //registers.CONFIG_R |= (1 << PWR_UP) ;
   registers.CONFIG_R |= (1 << PRIM_RX) ;
   write_register(command,&registers.CONFIG_R,length) ;
-  NRF24L01_CE_HIGH ;
+  setCE(HIGH) ;
 }
 void nrf_TX_Mode(){
   unsigned char command = W_REGISTER | CONFIG ;
@@ -213,7 +171,7 @@ void nrf_TX_Mode(){
   //registers.CONFIG_R |= (1 << PWR_UP) ;
   registers.CONFIG_R &= ~(1 << PRIM_RX) ;
   write_register(command,&registers.CONFIG_R,length) ;
-  NRF24L01_CE_HIGH ;
+  setCE(HIGH) ;
 }
 
 
@@ -259,7 +217,7 @@ void interrupt(){
 
 void write_register(unsigned char command, unsigned char* data, unsigned int length)
 { 
-  NRF24L01_CSN_LOW ;
+  setCSN(LOW) ;
   
   SSP_SendData(LPC_SSP1,command) ;
   registers.STATUS_R = SSP_ReceiveData(LPC_SSP1) ;
@@ -269,12 +227,12 @@ void write_register(unsigned char command, unsigned char* data, unsigned int len
   
   while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
 
-  NRF24L01_CSN_HIGH ;
+  setCSN(HIGH) ;
 }
 
 void read_register(unsigned char command, unsigned char* data, unsigned int length)
 {
-  NRF24L01_CSN_LOW ;
+  setCSN(LOW) ;
   
   SSP_SendData(LPC_SSP1,command) ;
   registers.STATUS_R = SSP_ReceiveData(LPC_SSP1) ;
@@ -286,5 +244,5 @@ void read_register(unsigned char command, unsigned char* data, unsigned int leng
 
   while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
 
-  NRF24L01_CSN_HIGH ;
+  setCSN(HIGH) ;
 }

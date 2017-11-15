@@ -136,17 +136,6 @@
 
 
 
-
-#define NRF24L01_CE_OUT		LPC_GPIO0->FIODIR |= (1<<17)
-#define NRF24L01_CE_HIGH	LPC_GPIO0->FIOSET |= (1<<17)
-#define NRF24L01_CE_LOW		LPC_GPIO0->FIOCLR |= (1<<17)
-
-#define NRF24L01_CSN_HIGH	LPC_GPIO0->FIOSET |= (1<<6)
-#define NRF24L01_CSN_LOW	LPC_GPIO0->FIOCLR |= (1<<6)
-#define NRF24L01_CSN_OUT        LPC_GPIO0->FIODIR |= (1<<6)
-
-
-
 typedef struct {
   unsigned char CONFIG_R ;
   unsigned char EN_AA_R ;

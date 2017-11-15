@@ -87,6 +87,7 @@
       c_user_include_directories=".;$(SolutionDir)/Drivers/include" />
     <folder Name="nRF">
       <file file_name="nRF/nrf24.c" />
+      <file file_name="nRF/nrf_hal_cmsis.c" />
     </folder>
   </project>
   <configuration
