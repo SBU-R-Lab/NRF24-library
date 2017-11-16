@@ -169,6 +169,8 @@ typedef struct {
 #define SetBit(x, y)  x | BV(y)
 #define ClrBit(x, y)  x & ~BV(y)
 
+#define CalcRetransmitDelay(x)  (x / 250) - 1
+
 #define RX  1
 #define TX  0
 
@@ -180,15 +182,30 @@ typedef struct {
 
 #define CRC_16BIT 1
 #define CRC_8BIT  0
+
+#define RATE_250KBPS  2
+#define RATE_1MBPS  0
+#define RATE_2MBPS  1
+
+#define OUTPUT_18dBm 0
+#define OUTPUT_12dBm 1
+#define OUTPUT_6dBm 2
+#define OUTPUT_0dBm 3
 /*********************************************/
 
 
 /*********  Configuration functions  *********/
-void nrf_init() ;
-void nrf_interrupt() ;
+void nrf_init(void);
+void nrf_interrupt(void);
 void nrf_set_mode(unsigned char mode);
 void nrf_set_power_state(unsigned char power);
 void nrf_config_crc(unsigned char enable, unsigned char scheme);
+void nrf_set_retries(unsigned short delay, unsigned char count);
+void nrf_set_address_width(unsigned char width);
+void nrf_set_rf_channel(unsigned char channel);
+void nrf_set_data_rate(unsigned char rate);
+void nrf_set_output_power(unsigned char power);
+void nrf_clear_interrupt_flags(void);
 /*********************************************/
 
 /************  Pipeline functions  ***********/

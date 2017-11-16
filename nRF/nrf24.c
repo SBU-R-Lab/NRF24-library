@@ -23,6 +23,16 @@ void nrf_init()
   nrf_hal_delay(100);
   
   nrf_config_crc(ENABLE, CRC_16BIT);
+  nrf_set_retries(1500,15);
+  nrf_set_data_rate(RATE_1MBPS);
+  nrf_set_output_power(OUTPUT_12dBm);
+
+  nrf_clear_interrupt_flags();
+  nrf_set_rf_channel(76);
+  nrf_flush_rx();
+  nrf_flush_tx();
+  nrf_set_power_state(POWER_UP);
+  nrf_set_mode(TX);
 }
 
 
@@ -68,6 +78,84 @@ void nrf_config_crc(unsigned char enable, unsigned char scheme)
   command = W_REGISTER | CONFIG;
   nrf_hal_write_register(command,&data,length);
 }
+
+void nrf_set_retries(unsigned short delay, unsigned char count)
+{
+  if(delay < 250)
+    delay = 250;
+
+  if(delay > 4000)
+    delay = 4000;
+
+  if(count > 15)
+    count = 15;
+  
+  unsigned char delayCalculated = CalcRetransmitDelay(delay);
+  unsigned char command = W_REGISTER | SETUP_RETR;
+  unsigned char length = 1;
+  unsigned char data = count | (delayCalculated << ARD);
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_set_address_width(unsigned char width)
+{
+  if(width < 3)
+    width = 3;
+  if(width > 5)
+    width = 5;
+
+  unsigned char command = W_REGISTER | SETUP_AW;
+  unsigned char length = 1;
+  unsigned char data = width - 2;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_set_rf_channel(unsigned char channel)
+{
+  if(channel > 127)
+    channel = 127;
+
+  unsigned char command = W_REGISTER | RF_CH;
+  unsigned char length = 1;
+  unsigned char data = channel;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_set_data_rate(unsigned char rate)
+{
+  unsigned char command = R_REGISTER | RF_SETUP;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+
+  data = (rate & 1) ? SetBit(data, RF_DR_HIGH) : ClrBit(data, RF_DR_HIGH);
+  data = (rate & 2) ? SetBit(data, RF_DR_LOW) : ClrBit(data, RF_DR_LOW);
+
+  command = W_REGISTER | RF_SETUP;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_set_output_power(unsigned char power)
+{
+  unsigned char command = R_REGISTER | RF_SETUP;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+
+  data = data & 0xF8;
+  data = data | (power << RF_PWR);
+
+  command = W_REGISTER | RF_SETUP;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_clear_interrupt_flags()
+{
+  unsigned char command = W_REGISTER | STATUS;
+  unsigned char length = 1;
+  unsigned char data = SetBit(data, RX_DR) | SetBit(data, TX_DS) | SetBit(data, MAX_RT);
+  nrf_hal_write_register(command,&data,length);
+}
 /*********************************************/
 
 
@@ -86,8 +174,7 @@ void nrf_set_rx_pipe_en(unsigned char n,unsigned char en){
 }
 
 void nrf_set_tx_payload(unsigned char* data,unsigned char length){
-  unsigned char command = W_TX_PAYLOAD_NOACK ;
-  nrf_hal_write_register(command,data,length) ;
+
 }
 
 void nrf_rx_payload(unsigned char* data){
