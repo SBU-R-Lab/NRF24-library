@@ -1,30 +1,22 @@
 #include "lpc17xx_ssp.h"
 #include "nrf_hal.h"
 
-void init_system()
+void nrf_hal_init_system()
 {
 
 }
 
-void init_irq()
-{
-  LPC_GPIO0->FIODIR &= !(1<<5) ;
-  LPC_GPIOINT->IO0IntEnF |=(1<<5) ;
-  NVIC_EnableIRQ(EINT3_IRQn);
-}
-
-
-void init_gpio()
+void nrf_hal_init_gpio()
 {
 
   LPC_GPIO0->FIODIR |= (1<<17);
-  setCE(LOW);
+  nrf_hal_set_ce(LOW);
 
   LPC_GPIO0->FIODIR |= (1<<6);
-  setCSN(HIGH);
+  nrf_hal_set_csn(HIGH);
 }
 
-void init_ssp()
+void nrf_hal_init_ssp()
 {
   LPC_PINCON->PINSEL0 |= 0x2<<14 ; //SCK1
   LPC_PINCON->PINSEL0 |= 0x2<<16 ; //MISO1
@@ -39,7 +31,7 @@ void init_ssp()
   SSP_Cmd(LPC_SSP1,ENABLE) ;
 }
 
-void setCE(unsigned char state)
+void nrf_hal_set_ce(unsigned char state)
 {
   if(state)
     LPC_GPIO0->FIOSET |= (1<<17);
@@ -47,7 +39,7 @@ void setCE(unsigned char state)
     LPC_GPIO0->FIOCLR |= (1<<17);
 }
 
-void setCSN(unsigned char state)
+void nrf_hal_set_csn(unsigned char state)
 {
   if(state)
     LPC_GPIO0->FIOSET |= (1<<6);
@@ -56,10 +48,10 @@ void setCSN(unsigned char state)
 }
 
 
-unsigned char write_register(unsigned char command, unsigned char* data, unsigned int length)
+unsigned char nrf_hal_write_register(unsigned char command, unsigned char* data, unsigned int length)
 { 
   unsigned char status = 0;
-  setCSN(LOW) ;
+  nrf_hal_set_csn(LOW) ;
   
   SSP_SendData(LPC_SSP1,command) ;
   status = SSP_ReceiveData(LPC_SSP1) ;
@@ -69,15 +61,15 @@ unsigned char write_register(unsigned char command, unsigned char* data, unsigne
   
   while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
 
-  setCSN(HIGH) ;
+  nrf_hal_set_csn(HIGH) ;
   
   return status;
 }
 
-unsigned char read_register(unsigned char command, unsigned char* data, unsigned int length)
+unsigned char nrf_hal_read_register(unsigned char command, unsigned char* data, unsigned int length)
 {
   unsigned char status = 0;
-  setCSN(LOW) ;
+  nrf_hal_set_csn(LOW) ;
   
   SSP_SendData(LPC_SSP1,command) ;
   status = SSP_ReceiveData(LPC_SSP1) ;
@@ -89,7 +81,7 @@ unsigned char read_register(unsigned char command, unsigned char* data, unsigned
 
   while (SSP_GetStatus(LPC_SSP1,SSP_STAT_BUSY) );
 
-  setCSN(HIGH) ;
+  nrf_hal_set_csn(HIGH) ;
 
   return status;
 }

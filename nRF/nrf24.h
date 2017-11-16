@@ -16,6 +16,9 @@
 #define W_TX_PAYLOAD_NOACK  0xB0
 #define NOP 0xFF
 
+/*
+ *  Registers
+ */
 #define CONFIG  0x00
 #define EN_AA   0x01
 #define EN_RXADDR   0x02
@@ -139,33 +142,7 @@
 
 
 
-typedef struct {
-  unsigned char CONFIG_R ;
-  unsigned char EN_AA_R ;
-  unsigned char EN_RXADDR_R ;
-  unsigned char SETUP_AW_R ;
-  unsigned char SETUP_RETR_R ;
-  unsigned char RF_CH_R ;
-  unsigned char RF_SETUP_R ;
-  unsigned char STATUS_R ;
-  unsigned char OBSERVE_TX_R ;
-  unsigned char RPD_R ;
-  unsigned char FIFO_STATUS_R ;
-  unsigned char DYNPD_R ;
-  unsigned char FEATURE_R ;
-//  unsigned char[5] RX_ADDR_P0 ;
-//  unsigned char[5] RX_ADDR_P1 ;
-//  unsigned char RX_ADDR_P2 ;
-//  unsigned char RX_ADDR_P3 ;
-//  unsigned char RX_ADDR_P4 ;
-//  unsigned char RX_ADDR_P5 ;
-//  unsigned char RX_ADDR_P6 ;
-  unsigned char* RX_ADDR_R[6] ;  
-  unsigned char RX_PW_R[6] ;
-  unsigned char* TX_ADDR_R ;
-  
-} nRF_REGISTERS;
-
+/**************  Structures  ****************/
 typedef  struct {
   unsigned char pipe_number ;
   unsigned char* addr ;
@@ -175,30 +152,47 @@ typedef  struct {
   unsigned char* recieve_buffer ;
   unsigned char* transmit_buffer ;
 } RX_PIPE_CONFIG ; 
+
 typedef  struct {
   unsigned char setup_retr ;
   unsigned char* tx_addr ;
-
 } TX_CONFIG ; 
 
 typedef struct {
   unsigned char CE_PIN;
   unsigned char IRQ_PIN;
 } nRF_CONFIG;
+/*********************************************/
 
-void nrf_power_up();
-void interrupt() ;
+/**********  Macros and Definitions  *********/
+#define BV(x) (1 << x)
+#define SetBit(x, y)  x | BV(y)
+#define ClrBit(x, y)  x & ~BV(y)
+
+#define RX  1
+#define TX  0
+
+#define POWER_UP  1
+#define POWER_DOWN  0
+/*********************************************/
+
+
+/*********  Configuration functions  *********/
 void nrf_init() ;
-void init_registers() ;
-void config_tx_pipe(TX_CONFIG* conf);
-void config_rx_pipe(RX_PIPE_CONFIG* conf);
-void set_rx_pipe_en(unsigned char n,unsigned char en);
-void set_tx_payload(unsigned char* data,unsigned char length);
-void nrf_RX_Mode();
-void nrf_TX_Mode();
-void nrf_power_up();
-void nrf_power_down();
-void rx_payload(unsigned char* data) ;
-void flush_tx();
+void nrf_interrupt() ;
+void nrf_set_mode(unsigned char mode);
+void nrf_set_power_state(unsigned char power);
+/*********************************************/
+
+/************  Pipeline functions  ***********/
+void nrf_config_tx_pipe(TX_CONFIG* conf);
+void nrf_config_rx_pipe(RX_PIPE_CONFIG* conf);
+void nrf_set_rx_pipe_en(unsigned char n,unsigned char en);
+void nrf_set_tx_payload(unsigned char* data,unsigned char length);
+void nrf_rx_payload(unsigned char* data) ;
+void nrf_flush_tx(void);
+void nrf_flush_rx(void);
+/*********************************************/
+
 
 #endif
