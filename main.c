@@ -47,7 +47,7 @@ void init_irq_pin()
 
 void EINT3_IRQHandler(){
   LPC_GPIOINT->IO0IntClr = (1 << 5);
-  nrf_interrupt() ;
+  /* TODO: Handle interrupt */
 }
 
 /*************************** End of file ****************************/

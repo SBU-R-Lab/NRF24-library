@@ -112,7 +112,7 @@
  * OBSERVE_TX
  */
 #define ARC_CNT     0
-#define PLOC_CNT    4
+#define PLOS_CNT    4
 
 /*
  * FIFO_STATUS
@@ -172,6 +172,9 @@ typedef struct {
 
 #define CalcRetransmitDelay(x)  (x / 250) - 1
 
+#define NOT_REFLECT 1
+#define REFLECT 0
+
 #define RX  1
 #define TX  0
 
@@ -194,14 +197,18 @@ typedef struct {
 #define OUTPUT_0dBm 3
 
 #define NORMAL  0
-#define ACK_PAYLOAD 1
 #define NOACK_PAYLOAD 2
+
+#define CARRIER_DETECTED  1
+#define CARRIER_NOT_DETECTED  0
 /*********************************************/
 
 
 /*********  Configuration functions  *********/
 void nrf_init(void);
-void nrf_interrupt(void);
+void nrf_mask_rx_dr_interrupt(unsigned char state);
+void nrf_mask_tx_ds_interrupt(unsigned char state);
+void nrf_mask_max_rt_interrupt(unsigned char state);
 void nrf_set_mode(unsigned char mode);
 void nrf_set_power_state(unsigned char power);
 void nrf_config_crc(unsigned char enable, unsigned char scheme);
@@ -210,18 +217,30 @@ void nrf_set_address_width(unsigned char width);
 void nrf_set_rf_channel(unsigned char channel);
 void nrf_set_data_rate(unsigned char rate);
 void nrf_set_output_power(unsigned char power);
+void nrf_set_continuous_carrier_transmit(unsigned char cont_wave);
+void nrf_set_pll_lock(unsigned char pll_lock);
 void nrf_clear_interrupt_flags(void);
 unsigned char nrf_get_status(void);
+unsigned char nrf_get_fifo_status(void);
+unsigned char nrf_get_rpd_status(void);
+void nrf_get_tx_observation_status(unsigned char* plos_cnt, unsigned char* arc_cnt);
+void nrf_reset_lost_packets_counter(void);
+void nrf_enable_dynamic_payload_length_feature(unsigned char state);
+void nrf_enable_payload_with_ack_feature(unsigned char state);
+void nrf_enable_dynamic_dynamic_ack_feature(unsigned char state);
 /*********************************************/
 
 /************  Pipeline functions  ***********/
-void nrf_config_tx_pipe(TX_CONFIG* conf);
-void nrf_config_rx_pipe(RX_PIPE_CONFIG* conf);
-void nrf_set_rx_pipe_en(unsigned char n,unsigned char en);
-
+void nrf_enable_rx_pipe_auto_ack(unsigned char pipe, unsigned char state);
+void nrf_enable_rx_pipe(unsigned char pipe, unsigned char state);
+void nrf_set_tx_pipe_address(unsigned char* address);
+void nrf_set_rx_pipe_address(unsigned char pipe, unsigned char* address);
+void nrf_enable_dynamic_payload_length_pipe(unsigned char pipe, unsigned char state);
+void nrf_set_rx_pipe_size(unsigned char pipe, unsigned char size);
 unsigned char nrf_read_rx_payload_size(void);
 void nrf_read_rx_payload(unsigned char* data, unsigned char length);
 void nrf_write_tx_payload(unsigned char mode, unsigned char length, unsigned char* data);
+void nrf_write_ack_payload(unsigned char pipe, unsigned char length, unsigned char* data);
 void nrf_flush_tx(void);
 void nrf_flush_rx(void);
 /*********************************************/

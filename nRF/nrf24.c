@@ -7,6 +7,8 @@
  */
 unsigned char status;
 
+unsigned char rf_channel;
+
 
 /*********  Configuration functions  *********/
 
@@ -35,10 +37,37 @@ void nrf_init()
   nrf_set_mode(TX);
 }
 
-
-void nrf_interrupt()
+void nrf_mask_rx_dr_interrupt(unsigned char state)
 {
+  unsigned char command = R_REGISTER | CONFIG;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (state == NOT_REFLECT) ? SetBit(data,MASK_RX_DR) : ClrBit(data,MASK_RX_DR);
+  command = W_REGISTER | CONFIG;
+  nrf_hal_write_register(command,&data,length);
+}
 
+void nrf_mask_tx_ds_interrupt(unsigned char state)
+{
+  unsigned char command = R_REGISTER | CONFIG;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (state == NOT_REFLECT) ? SetBit(data,MASK_TX_DS) : ClrBit(data,MASK_TX_DS);
+  command = W_REGISTER | CONFIG;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_mask_max_rt_interrupt(unsigned char state)
+{
+  unsigned char command = R_REGISTER | CONFIG;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (state == NOT_REFLECT) ? SetBit(data,MASK_MAX_RT) : ClrBit(data,MASK_MAX_RT);
+  command = W_REGISTER | CONFIG;
+  nrf_hal_write_register(command,&data,length);
 }
 
 void nrf_set_mode(unsigned char mode)
@@ -115,6 +144,8 @@ void nrf_set_rf_channel(unsigned char channel)
   if(channel > 127)
     channel = 127;
 
+  rf_channel = channel;
+
   unsigned char command = W_REGISTER | RF_CH;
   unsigned char length = 1;
   unsigned char data = channel;
@@ -149,6 +180,32 @@ void nrf_set_output_power(unsigned char power)
   nrf_hal_write_register(command,&data,length);
 }
 
+void nrf_set_continuous_carrier_transmit(unsigned char cont_wave)
+{
+  unsigned char command = R_REGISTER | RF_SETUP;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+
+  data = (cont_wave == ENABLE) ? SetBit(data, CONT_WAVE) : ClrBit(data, CONT_WAVE);
+
+  command = W_REGISTER | RF_SETUP;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_set_pll_lock(unsigned char pll_lock)
+{
+  unsigned char command = R_REGISTER | RF_SETUP;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+
+  data = (pll_lock == ENABLE) ? SetBit(data, PLL_LOCK) : ClrBit(data, PLL_LOCK);
+
+  command = W_REGISTER | RF_SETUP;
+  nrf_hal_write_register(command,&data,length);
+}
+
 void nrf_clear_interrupt_flags()
 {
   unsigned char command = W_REGISTER | STATUS;
@@ -160,26 +217,155 @@ void nrf_clear_interrupt_flags()
 unsigned char nrf_get_status()
 {
   unsigned char command = NOP;
+  return nrf_hal_write_register(command,0,0);
+}
+
+unsigned char nrf_get_fifo_status()
+{
+  unsigned char command = R_REGISTER | FIFO_STATUS;
   unsigned char length = 1;
   unsigned char data = 0;
   nrf_hal_read_register(command,&data,length);
   return data;
+}
+
+unsigned char nrf_get_rpd_status()
+{
+  unsigned char command = R_REGISTER | RPD;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  return (data) ? CARRIER_DETECTED : CARRIER_NOT_DETECTED;
+}
+
+void nrf_get_tx_observation_status(unsigned char* plos_cnt, unsigned char* arc_cnt)
+{
+  unsigned char command = R_REGISTER | OBSERVE_TX;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  
+  *plos_cnt = (data & 0xF0) >> PLOS_CNT;
+  *arc_cnt  = (data & 0x0F) >> ARC_CNT;
+}
+
+void nrf_reset_lost_packets_counter()
+{
+  unsigned char command = W_REGISTER | RF_CH;
+  unsigned char length = 1;
+  unsigned char data = rf_channel;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_enable_dynamic_payload_length_feature(unsigned char state)
+{
+  unsigned char command = R_REGISTER | FEATURE;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (state == ENABLE) ? SetBit(data, EN_DPL) : ClrBit(data, EN_DPL);
+  command = W_REGISTER | FEATURE;
+  nrf_hal_write_register(command, &data, length);
+}
+
+void nrf_enable_payload_with_ack_feature(unsigned char state)
+{
+  unsigned char command = R_REGISTER | FEATURE;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (state == ENABLE) ? SetBit(data, EN_ACK_PAY) : ClrBit(data, EN_ACK_PAY);
+  command = W_REGISTER | FEATURE;
+  nrf_hal_write_register(command, &data, length);
+}
+
+void nrf_enable_dynamic_dynamic_ack_feature(unsigned char state)
+{
+  unsigned char command = R_REGISTER | FEATURE;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (state == ENABLE) ? SetBit(data, EN_DYN_ACK) : ClrBit(data, EN_DYN_ACK);
+  command = W_REGISTER | FEATURE;
+  nrf_hal_write_register(command, &data, length);
 }
 /*********************************************/
 
 
 
 /************  Pipeline functions  ***********/
-void nrf_config_tx_pipe(TX_CONFIG* conf){
-  
+
+void nrf_enable_rx_pipe_auto_ack(unsigned char pipe, unsigned char state)
+{
+  if(pipe > 5)
+    return;
+
+  unsigned char command = R_REGISTER | EN_AA;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command, &data, length);
+  data = (state == ENABLE) ? SetBit(data, pipe) : ClrBit(data,pipe);
+  command = W_REGISTER | DYNPD;
+  nrf_hal_write_register(command,&data,length);
 }
 
-void nrf_config_rx_pipe(RX_PIPE_CONFIG* conf){
+void nrf_enable_rx_pipe(unsigned char pipe, unsigned char state)
+{
+  if(pipe > 5)
+    return;
 
+  unsigned char command = R_REGISTER | EN_RXADDR;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command, &data, length);
+  data = (state == ENABLE) ? SetBit(data, pipe) : ClrBit(data,pipe);
+  command = W_REGISTER | DYNPD;
+  nrf_hal_write_register(command,&data,length);
 }
 
-void nrf_set_rx_pipe_en(unsigned char n,unsigned char en){
+void nrf_set_tx_pipe_address(unsigned char* address)
+{
+  unsigned char command = W_REGISTER | TX_ADDR;
+  unsigned char length = 5;
+  nrf_hal_write_register(command,address,length);
+}
 
+void nrf_set_rx_pipe_address(unsigned char pipe, unsigned char* address)
+{
+  if (pipe > 5)
+    return;
+
+  unsigned char command = W_REGISTER | (RX_ADDR_P0 + pipe);
+  unsigned char length = (pipe < 2) ? 5 : 1;
+  nrf_hal_write_register(command,address,length);
+}
+
+void nrf_enable_dynamic_payload_length_pipe(unsigned char pipe, unsigned char state)
+{
+  if(pipe > 5)
+    return;
+
+  unsigned char command = R_REGISTER | DYNPD;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command, &data, length);
+  data = (state == ENABLE) ? SetBit(data, pipe) : ClrBit(data,pipe);
+  command = W_REGISTER | DYNPD;
+  nrf_hal_write_register(command,&data,length);
+}
+
+void nrf_set_rx_pipe_size(unsigned char pipe, unsigned char size)
+{
+  if (pipe > 5)
+    return;
+
+  if(size > 32)
+    size = 32;
+
+  unsigned char command = W_REGISTER | (RX_PW_P0 + pipe);
+  unsigned char length = 1;
+  unsigned char data = size;
+  nrf_hal_write_register(command,&data,length);
 }
 
 unsigned char nrf_read_rx_payload_size()
@@ -206,16 +392,21 @@ void nrf_write_tx_payload(unsigned char mode, unsigned char length, unsigned cha
         command = W_TX_PAYLOAD;
         break;
 
-      case ACK_PAYLOAD:
-        command = W_ACK_PAYLOAD;
-        break;
-
       case NOACK_PAYLOAD:
         command = W_TX_PAYLOAD_NOACK;
         break;
    }
 
    nrf_hal_write_register(command, data, length);
+}
+
+void nrf_write_ack_payload(unsigned char pipe, unsigned char length, unsigned char* data)
+{
+  if(pipe > 5)
+    return;
+
+  unsigned char command = W_ACK_PAYLOAD | pipe;
+  nrf_hal_write_register(command,data,length);
 }
 
 void nrf_reuse_tx_payload()
