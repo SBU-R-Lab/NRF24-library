@@ -164,6 +164,7 @@ typedef struct {
 } nRF_CONFIG;
 /*********************************************/
 
+
 /**********  Macros and Definitions  *********/
 #define BV(x) (1 << x)
 #define SetBit(x, y)  x | BV(y)
@@ -191,6 +192,10 @@ typedef struct {
 #define OUTPUT_12dBm 1
 #define OUTPUT_6dBm 2
 #define OUTPUT_0dBm 3
+
+#define NORMAL  0
+#define ACK_PAYLOAD 1
+#define NOACK_PAYLOAD 2
 /*********************************************/
 
 
@@ -206,14 +211,17 @@ void nrf_set_rf_channel(unsigned char channel);
 void nrf_set_data_rate(unsigned char rate);
 void nrf_set_output_power(unsigned char power);
 void nrf_clear_interrupt_flags(void);
+unsigned char nrf_get_status(void);
 /*********************************************/
 
 /************  Pipeline functions  ***********/
 void nrf_config_tx_pipe(TX_CONFIG* conf);
 void nrf_config_rx_pipe(RX_PIPE_CONFIG* conf);
 void nrf_set_rx_pipe_en(unsigned char n,unsigned char en);
-void nrf_set_tx_payload(unsigned char* data,unsigned char length);
-void nrf_rx_payload(unsigned char* data) ;
+
+unsigned char nrf_read_rx_payload_size(void);
+void nrf_read_rx_payload(unsigned char* data, unsigned char length);
+void nrf_write_tx_payload(unsigned char mode, unsigned char length, unsigned char* data);
 void nrf_flush_tx(void);
 void nrf_flush_rx(void);
 /*********************************************/

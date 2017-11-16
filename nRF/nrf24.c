@@ -156,6 +156,15 @@ void nrf_clear_interrupt_flags()
   unsigned char data = SetBit(data, RX_DR) | SetBit(data, TX_DS) | SetBit(data, MAX_RT);
   nrf_hal_write_register(command,&data,length);
 }
+
+unsigned char nrf_get_status()
+{
+  unsigned char command = NOP;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  return data;
+}
 /*********************************************/
 
 
@@ -173,12 +182,46 @@ void nrf_set_rx_pipe_en(unsigned char n,unsigned char en){
 
 }
 
-void nrf_set_tx_payload(unsigned char* data,unsigned char length){
-
+unsigned char nrf_read_rx_payload_size()
+{
+  unsigned char command = R_RX_PL_WID;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command, &data, length);
+  return data;
 }
 
-void nrf_rx_payload(unsigned char* data){
+void nrf_read_rx_payload(unsigned char* data, unsigned char length)
+{
+  unsigned char command = R_RX_PAYLOAD;
+  nrf_hal_read_register(command, data, length);
+}
 
+void nrf_write_tx_payload(unsigned char mode, unsigned char length, unsigned char* data)
+{
+   unsigned char command = 0;
+   switch (mode)
+   {
+      case NORMAL:
+        command = W_TX_PAYLOAD;
+        break;
+
+      case ACK_PAYLOAD:
+        command = W_ACK_PAYLOAD;
+        break;
+
+      case NOACK_PAYLOAD:
+        command = W_TX_PAYLOAD_NOACK;
+        break;
+   }
+
+   nrf_hal_write_register(command, data, length);
+}
+
+void nrf_reuse_tx_payload()
+{
+  unsigned char command = REUSE_TX_PL;
+  nrf_hal_write_register(command,0,0) ;
 }
 
 void nrf_flush_tx(){
