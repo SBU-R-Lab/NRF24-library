@@ -11,6 +11,8 @@ void nrf_hal_init_ssp(void);
 void nrf_hal_set_ce(unsigned char state);
 void nrf_hal_set_csn(unsigned char state);
 
+void nrf_hal_delay(unsigned long microseconds);
+
 unsigned char nrf_hal_write_register(unsigned char command, unsigned char* data, unsigned int length);
 unsigned char nrf_hal_read_register(unsigned char command, unsigned char* data, unsigned int length);
 

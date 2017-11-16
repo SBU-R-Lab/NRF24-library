@@ -18,6 +18,11 @@ void nrf_init()
   nrf_hal_init_system();
   nrf_hal_init_gpio();
   nrf_hal_init_ssp();
+
+  /*  Power on reset delay */
+  nrf_hal_delay(100);
+  
+  nrf_config_crc(ENABLE, CRC_16BIT);
 }
 
 
@@ -46,12 +51,28 @@ void nrf_set_power_state(unsigned char power)
   data = (power == POWER_UP) ? SetBit(data,PWR_UP) : ClrBit(data,PWR_UP);
   command = W_REGISTER | CONFIG;
   nrf_hal_write_register(command,&data,length);
+
+  /* if powering up wait for oscillator startup */
+  if(power == POWER_UP)
+    nrf_hal_delay(5);
 }
 
-
+void nrf_config_crc(unsigned char enable, unsigned char scheme)
+{
+  unsigned char command = R_REGISTER | CONFIG;
+  unsigned char length = 1;
+  unsigned char data = 0;
+  nrf_hal_read_register(command,&data,length);
+  data = (enable == ENABLE) ? SetBit(data,EN_CRC) : ClrBit(data,EN_CRC);
+  data = (scheme == CRC_16BIT) ? SetBit(data,CRCO) : ClrBit(data,CRCO);
+  command = W_REGISTER | CONFIG;
+  nrf_hal_write_register(command,&data,length);
+}
 /*********************************************/
 
 
+
+/************  Pipeline functions  ***********/
 void nrf_config_tx_pipe(TX_CONFIG* conf){
   
 }
@@ -82,3 +103,4 @@ void nrf_flush_rx(){
   unsigned char command = FLUSH_RX;
   nrf_hal_write_register(command,0,0) ;
 }
+/*********************************************/

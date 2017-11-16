@@ -47,6 +47,11 @@ void nrf_hal_set_csn(unsigned char state)
     LPC_GPIO0->FIOCLR |= (1<<6);
 }
 
+void nrf_hal_delay(unsigned long microseconds)
+{
+
+}
+
 
 unsigned char nrf_hal_write_register(unsigned char command, unsigned char* data, unsigned int length)
 { 

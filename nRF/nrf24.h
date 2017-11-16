@@ -174,6 +174,12 @@ typedef struct {
 
 #define POWER_UP  1
 #define POWER_DOWN  0
+
+#define ENABLE  1
+#define DISABLE 0
+
+#define CRC_16BIT 1
+#define CRC_8BIT  0
 /*********************************************/
 
 
@@ -182,6 +188,7 @@ void nrf_init() ;
 void nrf_interrupt() ;
 void nrf_set_mode(unsigned char mode);
 void nrf_set_power_state(unsigned char power);
+void nrf_config_crc(unsigned char enable, unsigned char scheme);
 /*********************************************/
 
 /************  Pipeline functions  ***********/
