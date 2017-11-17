@@ -19,8 +19,10 @@ Purpose : Generic application start
 #include <stdlib.h>
 #include "LPC17xx.h"
 #include "./nRF/nrf24.h"
+#include "./nRF/nrf_hal.h"
 
 void init_irq_pin();
+
 
 /*********************************************************************
 *
@@ -32,9 +34,9 @@ void init_irq_pin();
 void main(void) {
   init_irq_pin();
   nrf_init() ;
-
+ 
   while(1){
-    
+
   }
 }
 
@@ -47,7 +49,7 @@ void init_irq_pin()
 
 void EINT3_IRQHandler(){
   LPC_GPIOINT->IO0IntClr = (1 << 5);
-  /* TODO: Handle interrupt */
+  /* TODO: Handle Interrupt */
 }
 
 /*************************** End of file ****************************/

@@ -28,7 +28,6 @@ void nrf_init()
   nrf_set_retries(1500,15);
   nrf_set_data_rate(RATE_1MBPS);
   nrf_set_output_power(OUTPUT_12dBm);
-
   nrf_clear_interrupt_flags();
   nrf_set_rf_channel(76);
   nrf_flush_rx();
@@ -173,7 +172,7 @@ void nrf_set_output_power(unsigned char power)
   unsigned char data = 0;
   nrf_hal_read_register(command,&data,length);
 
-  data = data & 0xF8;
+  data = data & 0xF9;
   data = data | (power << RF_PWR);
 
   command = W_REGISTER | RF_SETUP;
@@ -210,7 +209,8 @@ void nrf_clear_interrupt_flags()
 {
   unsigned char command = W_REGISTER | STATUS;
   unsigned char length = 1;
-  unsigned char data = SetBit(data, RX_DR) | SetBit(data, TX_DS) | SetBit(data, MAX_RT);
+  unsigned char data = 0;
+  data = SetBit(data, RX_DR) | SetBit(data, TX_DS) | SetBit(data, MAX_RT);
   nrf_hal_write_register(command,&data,length);
 }
 
@@ -279,7 +279,7 @@ void nrf_enable_payload_with_ack_feature(unsigned char state)
   nrf_hal_write_register(command, &data, length);
 }
 
-void nrf_enable_dynamic_dynamic_ack_feature(unsigned char state)
+void nrf_enable_dynamic_ack_feature(unsigned char state)
 {
   unsigned char command = R_REGISTER | FEATURE;
   unsigned char length = 1;
@@ -288,6 +288,11 @@ void nrf_enable_dynamic_dynamic_ack_feature(unsigned char state)
   data = (state == ENABLE) ? SetBit(data, EN_DYN_ACK) : ClrBit(data, EN_DYN_ACK);
   command = W_REGISTER | FEATURE;
   nrf_hal_write_register(command, &data, length);
+}
+
+void nrf_enable_chip(unsigned char state)
+{
+  nrf_hal_set_ce(state);
 }
 /*********************************************/
 
@@ -305,7 +310,7 @@ void nrf_enable_rx_pipe_auto_ack(unsigned char pipe, unsigned char state)
   unsigned char data = 0;
   nrf_hal_read_register(command, &data, length);
   data = (state == ENABLE) ? SetBit(data, pipe) : ClrBit(data,pipe);
-  command = W_REGISTER | DYNPD;
+  command = W_REGISTER | EN_AA;
   nrf_hal_write_register(command,&data,length);
 }
 
@@ -319,7 +324,7 @@ void nrf_enable_rx_pipe(unsigned char pipe, unsigned char state)
   unsigned char data = 0;
   nrf_hal_read_register(command, &data, length);
   data = (state == ENABLE) ? SetBit(data, pipe) : ClrBit(data,pipe);
-  command = W_REGISTER | DYNPD;
+  command = W_REGISTER | EN_RXADDR;
   nrf_hal_write_register(command,&data,length);
 }
 

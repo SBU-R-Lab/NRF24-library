@@ -227,7 +227,8 @@ void nrf_get_tx_observation_status(unsigned char* plos_cnt, unsigned char* arc_c
 void nrf_reset_lost_packets_counter(void);
 void nrf_enable_dynamic_payload_length_feature(unsigned char state);
 void nrf_enable_payload_with_ack_feature(unsigned char state);
-void nrf_enable_dynamic_dynamic_ack_feature(unsigned char state);
+void nrf_enable_dynamic_ack_feature(unsigned char state);
+void nrf_enable_chip(unsigned char state);
 /*********************************************/
 
 /************  Pipeline functions  ***********/
@@ -241,6 +242,7 @@ unsigned char nrf_read_rx_payload_size(void);
 void nrf_read_rx_payload(unsigned char* data, unsigned char length);
 void nrf_write_tx_payload(unsigned char mode, unsigned char length, unsigned char* data);
 void nrf_write_ack_payload(unsigned char pipe, unsigned char length, unsigned char* data);
+void nrf_reuse_tx_payload(void);
 void nrf_flush_tx(void);
 void nrf_flush_rx(void);
 /*********************************************/
